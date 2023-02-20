@@ -1,4 +1,3 @@
-import os
 import discord
 import asyncio
 from discord.ext import commands
@@ -73,4 +72,4 @@ async def емб(ctx):
   embedVar.add_field(name="Осталось", value="понял", inline=True)
   await ctx.send(embed=embedVar)
 
-bot.run(os.getenv("MTA3MjUzMjEwNjM1OTYxNTQ4OA.GU8mlG.188gJeKvcZfVzCWG9_dCjo-M_d7VQZ88bFyahM"))
+bot.run('MTA3MjUzMjEwNjM1OTYxNTQ4OA.GU8mlG.188gJeKvcZfVzCWG9_dCjo-M_d7VQZ88bFyahM')
