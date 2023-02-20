@@ -20,7 +20,27 @@ async def on_ready():
 allowed_users = [695684705328169060, 617415875947003915]
 allowed_roles = []
 
- ## Команды
+## Ивенты
+
+@bot.event
+async def on_member_remove(member):
+    roles_str = ''
+    for role in member.roles:
+        if role.name != '@everyone':
+            roles_str += f'{role.name}, '
+    roles_str = roles_str[:-2]
+
+    date_format = "%d.%m.%Y %H:%M:%S"
+
+    join_date_str = member.joined_at.strftime(date_format) if member.joined_at else 'неизвестно'
+    leave_date_str = datetime.datetime.now().strftime(date_format)
+
+    message = f'**Участник покинул сервер!**\n\nДискорд тег человека: `{member}`\nID человека: `{member.id}`\nРоли которые были при выходе: `{roles_str}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`'
+
+    channel = bot.get_channel(1056222809057132635)
+    await channel.send(message)
+
+## Команды
 
 @bot.command()
 async def привет(ctx):
@@ -87,6 +107,6 @@ async def стартуй(ctx, count :int):
       n += 1
       await ctx.send(n)
 
- ## Запуск бота
+## Запуск бота
 
 bot.run('MTA3NzIzMzUzMTMyNDk5NzY3Mg.GqgPxz.X6Vw46JT6gifRMny4s3L_Jd6G4xYB-gTMjflNs')
