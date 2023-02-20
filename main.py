@@ -72,4 +72,4 @@ async def емб(ctx):
   embedVar.add_field(name="Осталось", value="понял", inline=True)
   await ctx.send(embed=embedVar)
 
-bot.run('MTA3MjUzMjEwNjM1OTYxNTQ4OA.GU8mlG.188gJeKvcZfVzCWG9_dCjo-M_d7VQZ88bFyahM')
+bot.run('MTA3NzIzMzUzMTMyNDk5NzY3Mg.GqgPxz.X6Vw46JT6gifRMny4s3L_Jd6G4xYB-gTMjflNs')
