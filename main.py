@@ -41,7 +41,7 @@ async def очистить(ctx, count):
 
 @bot.command()
 async def напомни(ctx, ttime, *, text = 'None'):
-  if ctx.author.id == 695684705328169060 or 617415875947003915:
+  if ctx.author.id in [695684705328169060, 617415875947003915]:
     try:
       n = ttime + '+0300'
       a = datetime.datetime.strptime(n, '%d.%m.%Y_%H:%M%z')
@@ -71,7 +71,7 @@ async def напомни(ctx, ttime, *, text = 'None'):
 
 @bot.command()
 async def стартуй(ctx, count :int):
-  if ctx.author.id == 695684705328169060 or 617415875947003915:
+  if ctx.author.id in [695684705328169060, 617415875947003915]:
     n = 0
     while n < count:
       n += 1
