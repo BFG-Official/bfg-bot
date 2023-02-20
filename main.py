@@ -10,6 +10,11 @@ bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 async def on_ready():
   print('BFG-bot готов к работе!')
 
+ ## Переменные
+
+allowed_users = [695684705328169060, 617415875947003915]
+allowed_roles = []
+
  ## Команды
 
 @bot.command()
@@ -41,7 +46,7 @@ async def очистить(ctx, count):
 
 @bot.command()
 async def напомни(ctx, ttime, *, text = 'None'):
-  if ctx.author.id in [695684705328169060, 617415875947003915]:
+  if ctx.author.id in allowed_users:
     try:
       n = ttime + '+0300'
       a = datetime.datetime.strptime(n, '%d.%m.%Y_%H:%M%z')
@@ -71,7 +76,7 @@ async def напомни(ctx, ttime, *, text = 'None'):
 
 @bot.command()
 async def стартуй(ctx, count :int):
-  if ctx.author.id in [695684705328169060, 617415875947003915]:
+  if ctx.author.id in allowed_users:
     n = 0
     while n < count:
       n += 1
