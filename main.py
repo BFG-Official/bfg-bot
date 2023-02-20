@@ -8,8 +8,13 @@ bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-  print('BFG-bot готов к работе!')
+    timezone = pytz.timezone("Europe/Moscow")
+    time_now = datetime.datetime.now(timezone)
 
+    time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
+
+    await bot.get_channel(1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот: `{time_str}`")
+    print('BFG-bot готов к работе!')
  ## Переменные
 
 allowed_users = [695684705328169060, 617415875947003915]
