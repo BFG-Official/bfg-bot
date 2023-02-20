@@ -10,6 +10,8 @@ bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 async def on_ready():
   print('BFG-bot готов к работе!')
 
+ ## Команды
+
 @bot.command()
 async def привет(ctx):
   await ctx.send(f'Ну здарова, {ctx.message.author.mention}!')
@@ -74,5 +76,7 @@ async def стартуй(ctx, count :int):
     while n < count:
       n += 1
       await ctx.send(n)
+
+ ## Запуск бота
 
 bot.run('MTA3NzIzMzUzMTMyNDk5NzY3Mg.GqgPxz.X6Vw46JT6gifRMny4s3L_Jd6G4xYB-gTMjflNs')
