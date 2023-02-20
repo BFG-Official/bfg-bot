@@ -21,7 +21,7 @@ async def пон(ctx, *, arg):
   try:
     await ctx.channel.purge(limit=1)
   except:
-    await ctx.send('Мне не разрешено удалять здесь сообщения')
+    await ctx.send('Мне не разрешено удалять здесь сообщения.')
 
 
 @bot.command()
@@ -31,7 +31,7 @@ async def очистить(ctx, count):
     if count > 0 and count <= 100:
       await ctx.channel.purge(limit=count+1)
     else:
-      await ctx.send('Количество сообщений разрешено не менее 1 и не более 100')
+      await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
   else:
     await ctx.send('Вам нельзя использовать эту команду!')
 
@@ -63,7 +63,7 @@ async def напомни(ctx, ttime, *, text = 'None'):
     except:
           await ctx.send('Пиши `+ждём (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
   else:
-    await ctx.send('Вам нельзя')
+    await ctx.send('Вам нельзя.')
 
 @bot.command()
 async def емб(ctx):
