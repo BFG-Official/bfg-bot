@@ -4,35 +4,38 @@ from discord.ext import commands
 import pytz
 import datetime
 
-bot = commands.Bot(command_prefix='+', intents=discord.Intents.all())
+bot = commands.Bot(command_prefix='-', intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-  print('Подключён')
+  print('BFG-bot готов к работе!')
 
 @bot.command()
 async def привет(ctx):
   await ctx.send(f'Ну здарова, {ctx.message.author.mention}!')
 
 @bot.command()
-async def пон(ctx, *, arg):
+async def повтори(ctx, *, arg):
   await ctx.send(arg)
-  try:
-    await ctx.channel.purge(limit=1)
-  except:
-    await ctx.send('Мне не разрешено удалять здесь сообщения.')
-
 
 @bot.command()
 async def очистить(ctx, count):
-  count = int(count)
-  if ctx.message.author.guild_permissions.administrator:
-    if count > 0 and count <= 100:
-      await ctx.channel.purge(limit=count+1)
+  try:
+    count = int(count)
+  except:
+    await ctx.send('+очистить (число)')
+    return
+  try:
+    if ctx.message.author.guild_permissions.administrator:
+      if count > 0 and count <= 100:
+        await ctx.channel.purge(limit=count+1)
+      else:
+        await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
     else:
-      await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
-  else:
-    await ctx.send('Вам нельзя использовать эту команду!')
+      await ctx.send('Вам нельзя использовать эту команду!')
+  except:
+    await ctx.send('Кажется я не могу удалять сообщения')
+    return
 
 @bot.command()
 async def напомни(ctx, ttime, *, text = 'None'):
@@ -65,11 +68,11 @@ async def напомни(ctx, ttime, *, text = 'None'):
     await ctx.send('Вам нельзя.')
 
 @bot.command()
-async def емб(ctx):
-  embedVar = discord.Embed(title="Напоминание", description = 'Установлено напоминание с текстом: \n' + 'TEXT', color=0x000000)
-  embedVar.add_field(name="Начало", value="понский", inline=True)
-  embedVar.add_field(name="Конец", value="понский", inline=True)
-  embedVar.add_field(name="Осталось", value="понял", inline=True)
-  await ctx.send(embed=embedVar)
+async def стартуй(ctx, count :int):
+  if ctx.author.id == 695684705328169060:
+    n = 0
+    while n < count:
+      n += 1
+      await ctx.send(n)
 
 bot.run('MTA3NzIzMzUzMTMyNDk5NzY3Mg.GqgPxz.X6Vw46JT6gifRMny4s3L_Jd6G4xYB-gTMjflNs')
