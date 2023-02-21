@@ -31,7 +31,7 @@ async def send_message_on_day(day_name, message):
 
     time_now = datetime.datetime.now(timezone)
 
-    if time_now.strftime("%A") == day_name and time_now.hour == 19:
+    if time_now.strftime("%A") == day_name and time_now.hour == 18:
         channel = bot.get_channel(1066794825971679282)
         await channel.send(message)
 
