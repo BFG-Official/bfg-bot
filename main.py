@@ -39,21 +39,27 @@ async def send_message_on_day(day_name, message):
 
 @bot.event
 async def on_member_remove(member):
-    roles_str = ''
-    for role in member.roles:
-        if role.name != '@everyone':
-            roles_str += f'{role.name}, '
-    roles_str = roles_str[:-2]
+  roles_str = ''
+  for role in member.roles:
+      if role.name != '@everyone':
+          roles_str += f'<@&{role.id}>\n'
 
-    date_format = "%d.%m.%Y %H:%M:%S"
+  date_format = "%d.%m.%Y %H:%M:%S"
 
-    join_date_str = member.joined_at.strftime(date_format) if member.joined_at else 'неизвестно'
-    leave_date_str = datetime.datetime.now().strftime(date_format)
+  join_date_str = member.joined_at.strftime(date_format) if member.joined_at else 'неизвестно'
+  leave_date_str = datetime.datetime.now().strftime(date_format)
 
-    message = f'**Участник покинул сервер!**\n\nДискорд тег человека: `{member}`\nID человека: `{member.id}`\nРоли которые были при выходе: `{roles_str}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`'
+  channel = bot.get_channel(1056222809057132635)
 
-    channel = bot.get_channel(1056222809057132635)
-    await channel.send(message)
+  embed = discord.Embed(
+    title='**Участник покинул сервер!**',
+    description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`',
+    color=000000
+  )
+
+  embed.add_field(name='Роли которые были при выходе', value=f'{roles_str}', inline=False)
+
+  await channel.send(embed = embed)
 
 ## Команды
 
@@ -121,6 +127,25 @@ async def стартуй(ctx, count :int):
     while n < count:
       n += 1
       await ctx.send(n)
+
+## Тест команды
+
+@bot.command()
+async def тестэмбед(ctx):
+  roles_str = ''
+  for role in ctx.author.roles:
+      if role.name != '@everyone':
+          roles_str += f'<@&{role.id}>\n'
+  
+  embed = discord.Embed(
+    title='**Ембед**',
+    description='2 + 2 * 2',
+    color=000000
+  )
+
+  embed.add_field(name='Ваши роли', value=f'{roles_str}', inline=False)
+
+  await ctx.send(embed = embed)
 
 ## Запуск бота
 
