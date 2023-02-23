@@ -139,8 +139,8 @@ async def тестэмбед(ctx):
   
   embed = discord.Embed(
     title='**Ембед**',
-    description='2 + 2 * 2',
-    color=000000
+    description='Пон',
+    color=discord.Colour.blue()
   )
 
   embed.add_field(name='Ваши роли', value=f'{roles_str}', inline=False)
