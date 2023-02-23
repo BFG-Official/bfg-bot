@@ -12,6 +12,8 @@ def pon():
 
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 
+bot.remove_command('help')
+
 @bot.event
 async def on_ready():
     timezone = pytz.timezone("Europe/Moscow")
@@ -33,20 +35,21 @@ mapchecker_role = [1068946458201575605]
 
 ## Ивенты
 
-'''@bot.event
+@bot.event
 async def on_message(message):
   if message.author == bot.user: return
   mess = message.content.lower()
   mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
   if pon() in mess:
     await message.channel.send('пидораст ты')
+  await bot.process_commands(message)
 
 @bot.event
 async def on_raw_message_edit(payload):
-    mess = payload.data['content']
-    mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
-    if pon() in mess:
-      await bot.get_channel(payload.channel_id).send('пидораст ты')''' # пока скрыл может придумаю чёт
+  mess = payload.data['content']
+  mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
+  if pon() in mess:
+    await bot.get_channel(payload.channel_id).send('пидораст ты')
 
 @bot.event
 async def send_message_on_day(day_name, message):
@@ -85,7 +88,7 @@ async def on_member_remove(member):
 ## Команды
 
 @bot.command()
-async def хелп(ctx):
+async def help(ctx):
   embed = discord.Embed(
     title = '**Список команд**',
     description = '`>привет` - Приветствие бота\n`>повтори (сообщение)` - Бот повторит ваше сообщение\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>тестэмбед` - тестовый эмбед',
