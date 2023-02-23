@@ -24,9 +24,9 @@ async def on_ready():
     await bot.get_channel(1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот [МСК]: `{time_str}`")
     print('BFG-bot готов к работе!')
 
-    await send_message_on_day('Tuesday', 'Привет, сегодня вторник.')
+    await send_message_on_day('Thursday', 'Привет, сегодня вторник.')
 
-## Переменные1
+## Переменные
 
 allowed_users = [695684705328169060, 617415875947003915]
 allowed_roles = [964807055980523520]
@@ -57,7 +57,7 @@ async def send_message_on_day(day_name, message):
 
     time_now = datetime.datetime.now(timezone)
 
-    if time_now.strftime("%A") == day_name and time_now.hour == 18:
+    if time_now.strftime("%A") == day_name and time_now.hour == 23:
         channel = bot.get_channel(1066794825971679282)
         await channel.send(message)
 
