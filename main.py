@@ -4,6 +4,12 @@ from discord.ext import commands
 import pytz
 import datetime
 
+def pon():
+  for p in ['п','П','π','p']:
+    for o in ['о','О','o','O','0','о́']:
+      for n in ['н','Н','H']:
+        return ' ' + p + o + n + ' '
+
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 
 @bot.event
@@ -26,6 +32,21 @@ moderator_roles = [964807055980523520, 854993494107750402, 960495606596517931, 8
 mapchecker_role = [1068946458201575605]
 
 ## Ивенты
+
+'''@bot.event
+async def on_message(message):
+  if message.author == bot.user: return
+  mess = message.content.lower()
+  mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
+  if pon() in mess:
+    await message.channel.send('пидораст ты')
+
+@bot.event
+async def on_raw_message_edit(payload):
+    mess = payload.data['content']
+    mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
+    if pon() in mess:
+      await bot.get_channel(payload.channel_id).send('пидораст ты')''' # пока скрыл может придумаю чёт
 
 @bot.event
 async def send_message_on_day(day_name, message):
@@ -64,6 +85,16 @@ async def on_member_remove(member):
 ## Команды
 
 @bot.command()
+async def хелп(ctx):
+  embed = discord.Embed(
+    title = '**Список команд**',
+    description = '`>привет` - Приветствие бота\n`>повтори (сообщение)` - Бот повторит ваше сообщение\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>тестэмбед` - тестовый эмбед',
+    color = discord.Colour.random()
+  )
+
+  await ctx.send(embed = embed)
+
+@bot.command()
 async def привет(ctx):
   await ctx.send(f'Ну здарова, {ctx.message.author.mention}!')
 
@@ -76,7 +107,7 @@ async def очистить(ctx, count):
   try:
     count = int(count)
   except:
-    await ctx.send('+очистить (число)')
+    await ctx.send('>очистить (число)')
     return
   try:
     if ctx.message.author.guild_permissions.administrator:
@@ -116,7 +147,7 @@ async def напомни(ctx, ttime, *, text = 'None'):
       else:
         await ctx.send('Пишите **будущую московскую** дату')
     except:
-          await ctx.send('Пиши `+ждём (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
+          await ctx.send('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
   else:
     await ctx.send('Вам нельзя.')
 
