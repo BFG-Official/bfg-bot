@@ -123,7 +123,6 @@ async def очистить(ctx, count):
 
 @bot.command()
 async def напомни(ctx, ttime, *, text = 'None'):
-  if ctx.author.id in allowed_users:
     try:
       n = ttime + '+0300'
       a = datetime.datetime.strptime(n, '%d.%m.%Y_%H:%M%z')
@@ -148,8 +147,6 @@ async def напомни(ctx, ttime, *, text = 'None'):
         await ctx.send('Пишите **будущую московскую** дату')
     except:
           await ctx.send('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
-  else:
-    await ctx.send('Вам нельзя.')
 
 @bot.command()
 async def стартуй(ctx, count :int):
