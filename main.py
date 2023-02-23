@@ -18,7 +18,7 @@ async def on_ready():
 
     await send_message_on_day('Tuesday', 'Привет, сегодня вторник.')
 
-## Переменные
+## Переменные1
 
 allowed_users = [695684705328169060, 617415875947003915]
 allowed_roles = [964807055980523520]
