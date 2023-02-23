@@ -54,7 +54,7 @@ async def on_member_remove(member):
   embed = discord.Embed(
     title='**Участник покинул сервер!**',
     description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`',
-    color=000000
+    color=discord.Colour.red()
   )
 
   embed.add_field(name='Роли которые были при выходе', value=f'{roles_str}', inline=False)
