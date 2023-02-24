@@ -133,7 +133,7 @@ async def help(ctx):
 
 @bot.command()
 async def привет(ctx):
-  await ctx.send(f'Ну здарова, {ctx.message.author.mention}!')
+  await ctx.send(f'Приветик, {ctx.message.author.mention}!')
 
 @bot.command()
 async def повтори(ctx, *, arg):
