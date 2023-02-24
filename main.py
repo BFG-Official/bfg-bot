@@ -11,7 +11,6 @@ def pon():
         return ' ' + p + o + n + ' '
 
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
-
 bot.remove_command('help')
 
 @bot.event
@@ -25,6 +24,15 @@ async def on_ready():
     print('BFG-bot готов к работе!')
 
     await send_message_on_day('Thursday', 'Привет, сегодня вторник.')
+
+    sec30 = 30
+    while sec30 >= 0:
+      if sec30 == 0:
+        await bot.get_channel(1066794825971679282).send('30 прошло')
+        sec30 = 30
+      print(sec30, time_now.day)
+      sec30 -= 1
+      await asyncio.sleep(1)
 
 ## Переменные
 
@@ -117,6 +125,14 @@ async def on_member_join(member):
         print(f'\n\nКикнут с сервера:\n{member}\n\n')
         await asyncio.sleep(2)
         await member.kick(reason="Недостаточный возраст аккаунта")
+    else:
+        embed = discord.Embed(
+          title = '**Участник присоеденился к серверу**',
+          description= f'Дискорд тег человека: `{member}`\nАккаунт создан __**{days_since_creation}**__ дней назад',
+          color = discord.Colour.green()
+        )
+        embed.add_field(name='ID', value=f'{member.id}')
+        await send_channel.send(embed = embed)
 
 
 ## Команды
