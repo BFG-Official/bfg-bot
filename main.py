@@ -25,14 +25,14 @@ async def on_ready():
 
     await send_message_on_day('Thursday', 'Привет, сегодня вторник.')
 
-    sec30 = 30
+    '''sec30 = 30
     while sec30 >= 0:
       if sec30 == 0:
         await bot.get_channel(1066794825971679282).send('30 прошло')
         sec30 = 30
       print(sec30, time_now.day)
       sec30 -= 1
-      await asyncio.sleep(1)
+      await asyncio.sleep(1)'''
 
 ## Переменные
 
