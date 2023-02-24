@@ -85,6 +85,22 @@ async def on_member_remove(member):
 
   await channel.send(embed = embed)
 
+@bot.event
+async def on_member_join(member):
+    timezone = pytz.timezone("Europe/Moscow")
+    time_now = datetime.datetime.now(timezone)
+
+    account_created_date = member.created_at
+    days_since_creation = (time_now - account_created_date).days
+    if days_since_creation < 15:
+        dm_channel = await member.create_dm()
+        send_channel = bot.get_channel(1056222809057132635)
+        await dm_channel.send("Вашему аккаунту должно быть хотя бы 15 дней!")
+        await send_channel.send(f'**Участник был кикнут из-за малого возраста аккаунта!**\nДискорд тег человека: `{member}`\nID человека: `{member.id}`')
+        await asyncio.sleep(1)
+        await member.kick(reason="Недостаточный возраст аккаунта")
+
+
 ## Команды
 
 @bot.command()
