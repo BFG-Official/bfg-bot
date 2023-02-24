@@ -61,8 +61,14 @@ async def send_message_on_day(day_name, message):
         channel = bot.get_channel(1066794825971679282)
         await channel.send(message)
 
+import asyncio
+
 @bot.event
 async def on_member_remove(member):
+  async for log in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.kick):
+      if log.target == member and log.user.bot:
+          return
+
   roles_str = ''
   for role in member.roles:
       if role.name != '@everyone':
@@ -77,13 +83,15 @@ async def on_member_remove(member):
 
   embed = discord.Embed(
     title='**Участник покинул сервер!**',
-    description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`',
+    description=f'Дискорд тег человека: `{member}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`',
     color=discord.Colour.red()
   )
 
+  embed.add_field(name='ID', value=f'{member.id}')
   embed.add_field(name='Роли которые были при выходе', value=f'{roles_str}', inline=False)
 
   await channel.send(embed = embed)
+
 
 @bot.event
 async def on_member_join(member):
@@ -92,12 +100,22 @@ async def on_member_join(member):
 
     account_created_date = member.created_at
     days_since_creation = (time_now - account_created_date).days
+
     if days_since_creation < 15:
         dm_channel = await member.create_dm()
         send_channel = bot.get_channel(1056222809057132635)
-        await dm_channel.send("Вашему аккаунту должно быть хотя бы 15 дней!")
-        await send_channel.send(f'**Участник был кикнут из-за малого возраста аккаунта!**\nДискорд тег человека: `{member}`\nID человека: `{member.id}`')
-        await asyncio.sleep(1)
+        
+        await dm_channel.send("**Вашему аккаунту должно быть хотя бы 15 дней!**")
+
+        embed = discord.Embed(
+          title='**Участник был кикнут из-за малого возраста аккаунта!**',
+          description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`',
+          color=discord.Colour.red()
+        )
+
+        await send_channel.send(embed = embed)
+        print(f'\n\nКикнут с сервера:\n{member}\n\n')
+        await asyncio.sleep(2)
         await member.kick(reason="Недостаточный возраст аккаунта")
 
 
@@ -185,9 +203,9 @@ async def тестэмбед(ctx):
           roles_str += f'<@&{role.id}>\n'
   
   embed = discord.Embed(
-    title='**Ембед**',
-    description='Пон',
-    color=discord.Colour.blue()
+    title='**Участник был кикнут из-за малого возраста аккаунта!**',
+    description=f'Дискорд тег человека: `1`\nID человека: `1`',
+    color=discord.Colour.red()
   )
 
   embed.add_field(name='Ваши роли', value=f'{roles_str}', inline=False)
