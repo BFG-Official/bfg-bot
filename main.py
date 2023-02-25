@@ -25,14 +25,13 @@ async def on_ready():
 
     await send_message_on_day('Thursday', 'Привет, сегодня вторник.')
 
-    '''sec30 = 30
-    while sec30 >= 0:
-      if sec30 == 0:
-        await bot.get_channel(1066794825971679282).send('30 прошло')
-        sec30 = 30
-      print(sec30, time_now.day)
-      sec30 -= 1
-      await asyncio.sleep(1)'''
+    while True:
+      time_now = datetime.datetime.now(timezone)
+      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_11_00_00':
+        await bot.get_channel(1066794825971679282).send('Сейчас суббота 11:00:00 по МСК')
+      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_16_00_00':
+        await bot.get_channel(1066794825971679282).send('Сейчас суббота 16:00:00 по МСК')
+      await asyncio.sleep(1)
 
 ## Переменные
 
