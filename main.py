@@ -25,12 +25,11 @@ async def on_ready():
     print('BFG-bot готов к работе!')
 
     start_time = datetime.datetime.now()
-    time_now = datetime.datetime.now(timezone)
 
     while True:
       await bot.change_presence(activity=discord.Game(name=f"Аптайм: {str(datetime.datetime.now() - start_time).split('.')[0]}"))
 
-      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
+      if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
         await bot.get_channel(854994534391218176).send('<@783836872924987422>, <@940246956649873428>, <@711122945619263539>, <@874847454959378494>, <@1035626825277263902>, <@926917101355171852>, <@1027971828548903032>\Скидываем карту.')
       await asyncio.sleep(1)
 
