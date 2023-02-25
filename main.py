@@ -48,7 +48,7 @@ async def on_message(message):
   mess = message.content.lower()
   mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
   if pon() in mess:
-    await message.channel.send('пидораст ты')
+    await message.reply('пидораст ты', mention_author=True)
   await bot.process_commands(message)
 
 @bot.event
