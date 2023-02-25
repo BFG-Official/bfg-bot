@@ -25,10 +25,8 @@ async def on_ready():
 
     while True:
       time_now = datetime.datetime.now(timezone)
-      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_11_00_00':
-        await bot.get_channel(1066794825971679282).send('Сейчас суббота 11:00:00 по МСК')
-      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_16_00_00':
-        await bot.get_channel(1066794825971679282).send('Сейчас суббота 16:00:00 по МСК')
+      if time_now.strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
+        await bot.get_channel(854994534391218176).send('<@783836872924987422>, <@940246956649873428>, <@711122945619263539>, <@874847454959378494>, <@1035626825277263902>, <@926917101355171852>, <@1027971828548903032>\nРаботать!!!')
       await asyncio.sleep(1)
 
 ## Переменные
