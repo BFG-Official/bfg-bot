@@ -3,6 +3,7 @@ import asyncio
 from discord.ext import commands
 import pytz
 import datetime
+# Это простой комментарий чтобы комитать, 1
 
 def pon():
   for p in ['п','П','π','p']:
