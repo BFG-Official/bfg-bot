@@ -28,6 +28,7 @@ async def on_ready():
     start_time = datetime.datetime.now()
 
     while True:
+      await bot.get_channel(1080185179752108063).send(f"Отчет: {datetime.datetime.now(timezone).strftime('%H:%M:%S')}")
       await bot.change_presence(activity=discord.Game(name=f"Аптайм: {str(datetime.datetime.now() - start_time).split('.')[0]}"))
 
       if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
