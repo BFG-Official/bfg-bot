@@ -100,11 +100,11 @@ async def on_member_join(member):
     account_created_date = member.created_at
     days_since_creation = (time_now - account_created_date).days
 
-    if days_since_creation < 15:
+    if days_since_creation < 7:
         dm_channel = await member.create_dm()
         send_channel = bot.get_channel(1056222809057132635)
         
-        await dm_channel.send("**Вашему аккаунту должно быть хотя бы 15 дней!**")
+        await dm_channel.send("**Вашему аккаунту должно быть хотя бы 7 дней!**")
 
         embed = discord.Embed(
           title='**Участник был кикнут из-за малого возраста аккаунта!**',
