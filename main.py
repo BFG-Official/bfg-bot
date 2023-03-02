@@ -117,13 +117,13 @@ async def on_member_join(member):
         await asyncio.sleep(2)
         await member.kick(reason="Недостаточный возраст аккаунта")
     else:
-        embed = discord.Embed(
+        embed_else = discord.Embed(
           title = '**Участник присоеденился к серверу**',
           description= f'Дискорд тег человека: `{member}`\nАккаунт создан __**{days_since_creation}**__ дней назад',
           color = discord.Colour.green()
         )
-        embed.add_field(name='ID', value=f'{member.id}')
-        await send_channel.send(embed = embed)
+        embed_else.add_field(name='ID', value=f'{member.id}')
+        await send_channel.send(embed = embed_else)
 
 
 ## Команды
