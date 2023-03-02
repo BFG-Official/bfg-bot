@@ -89,7 +89,7 @@ async def on_member_remove(member):
   embed.add_field(name='ID', value=f'{member.id}')
   embed.add_field(name='Роли которые были при выходе', value=f'{roles_str}', inline=False)
 
-  await channel.send(embed = embed)
+  await channel.send(f'<@{member.id}> покинул сервер', embed = embed)
 
 
 @bot.event
@@ -104,12 +104,12 @@ async def on_member_join(member):
         dm_channel = await member.create_dm()
         send_channel = bot.get_channel(1056222809057132635)
         
-        await dm_channel.send("**Вашему аккаунту должно быть хотя бы 7 дней!**")
+        await dm_channel.send("Мы заметили, что вашему аккаунту меньше 7 дней, поэтому вам необходимо немного подождать, прежде чем присоединяться к нашему серверу.")
 
         embed = discord.Embed(
-          title='**Участник был кикнут из-за малого возраста аккаунта!**',
-          description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`',
-          color=discord.Colour.red()
+            title='**Участник был кикнут из-за малого возраста аккаунта!**',
+            description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`',
+            color=discord.Colour.red()
         )
 
         await send_channel.send(embed = embed)
@@ -118,16 +118,20 @@ async def on_member_join(member):
         await member.kick(reason="Недостаточный возраст аккаунта")
 
     if days_since_creation > 7:
-        
         created_at = member.created_at.strftime("%d.%m.%Y %H:%M:%S") if member.created_at else 'неизвестно'
 
         embed = discord.Embed(
-          title = '**Участник присоединился к серверу**',
-          description= f'Дискорд тег человека: `{member}`\nАккаунт создан: `{created_at}`',
-          color = discord.Colour.green()
+            title = '**Участник присоединился к серверу**',
+            description= f'Дискорд тег человека: `{member}`\nАккаунт создан: `{created_at}`',
+            color = discord.Colour.green()
         )
         embed.add_field(name='ID', value=f'{member.id}')
-        await bot.get_channel(1056222809057132635).send(embed = embed)
+        await bot.get_channel(1056222809057132635).send(f'<@{member.id}> зашёл на сервер', embed = embed)
+
+
+
+        dm_channel = await member.create_dm()
+        await dm_channel.send("Привет! Добро пожаловать на наш сервер!")
 
 
 ## Команды
