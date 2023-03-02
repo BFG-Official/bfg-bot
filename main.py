@@ -128,10 +128,15 @@ async def on_member_join(member):
         embed.add_field(name='ID', value=f'{member.id}')
         await bot.get_channel(1056222809057132635).send(f'<@{member.id}> зашёл на сервер', embed = embed)
 
-
+        welcome_embed = discord.Embed(
+            title = 'Добро пожаловать на сервер!',
+            description='Добро пожаловать на сервер **BFG Game Developer**!\n\nВсю нужную вам информацию можно прочитать в канале <#864854156842106910>, так же если имеются вопросы то вы можете спросить их в форумной категории.\n\n(Так же подписывайтесь на наш Telegram канал: https://t.me/teleportal_news)',
+            color = discord.Colour.green()
+        )
+        welcome_embed.set_footer(text='Желаем удачи')
 
         dm_channel = await member.create_dm()
-        await dm_channel.send("Привет! Добро пожаловать на наш сервер!")
+        await dm_channel.send(f'<@{member.id}>,', embed = welcome_embed)
 
 
 ## Команды
