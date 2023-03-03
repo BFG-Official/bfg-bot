@@ -223,9 +223,9 @@ async def тестэмбед(ctx):
           roles_str += f'<@&{role.id}>\n'
   
   embed = discord.Embed(
-    title='**Участник был кикнут из-за малого возраста аккаунта!**',
+    title='**Тест!**',
     description=f'Дискорд тег человека: `1`\nID человека: `1`',
-    color=discord.Colour.red()
+    color=discord.Colour.purple()
   )
 
   embed.add_field(name='Ваши роли', value=f'{roles_str}', inline=False)
