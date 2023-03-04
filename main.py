@@ -97,14 +97,16 @@ async def on_member_join(member):
     timezone = pytz.timezone("Europe/Moscow")
     time_now = datetime.datetime.now(timezone)
 
+    days = 7
+
     account_created_date = member.created_at
     days_since_creation = (time_now - account_created_date).days
 
-    if days_since_creation < 7:
+    if days_since_creation < days:
         dm_channel = await member.create_dm()
         send_channel = bot.get_channel(1056222809057132635)
         
-        await dm_channel.send("Мы заметили, что вашему аккаунту меньше 7 дней, поэтому вам необходимо немного подождать, прежде чем присоединяться к нашему серверу.")
+        await dm_channel.send("Мы заметили, что вашему аккаунту меньше 7 дней, поэтому вам необходимо немного подождать, прежде чем присоединяться к нашему серверу.\n\nЭто связано с частыми случаями обхода блокировки на нашем сервере, если вы добропорядочный пользователь, то вам придется подождать 7 дней.\n\nЗа дополнительной информацией отпишите в Telegram: `@saberkovich`")
 
         embed = discord.Embed(
             title='**Участник был кикнут из-за малого возраста аккаунта!**',
@@ -117,7 +119,7 @@ async def on_member_join(member):
         await asyncio.sleep(2)
         await member.kick(reason="Недостаточный возраст аккаунта")
 
-    if days_since_creation > 7:
+    if days_since_creation > days:
         created_at = member.created_at.strftime("%d.%m.%Y %H:%M:%S") if member.created_at else 'неизвестно'
 
         embed = discord.Embed(
