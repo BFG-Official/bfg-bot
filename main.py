@@ -25,7 +25,7 @@ async def on_ready():
     await bot.get_channel(1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот [МСК]: `{time_str}`")
     print('BFG-bot готов к работе!')
 
-    start_time = datetime.datetime.now()
+    # start_time = datetime.datetime.now()
 
     while True:
       # await bot.change_presence(activity=discord.Game(name=f"Аптайм: {str(datetime.datetime.now() - start_time).split('.')[0]}"))
