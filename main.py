@@ -1,240 +1,39 @@
 import discord
-import asyncio
 from discord.ext import commands
-import pytz
-import datetime
-# Это простой комментарий чтобы комитать
-
-def pon(message):
-  for p in ['п','П','π','p','P']:
-    for o in ['о','О','o','O','0']:
-      for n in ['н','Н','H','n','N']:
-        if (' ' + p + o + n + ' ' in message):
-          return True
+import os
 
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 bot.remove_command('help')
 
-@bot.event
-async def on_ready():
-    timezone = pytz.timezone("Europe/Moscow")
-    time_now = datetime.datetime.now(timezone)
-
-    time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
-
-    # await bot.change_presence(activity=discord.Game(name="Включаюсь..."))
-    await bot.get_channel(1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот [МСК]: `{time_str}`")
-    print('BFG-bot готов к работе!')
-
-    # start_time = datetime.datetime.now()
-
-    while True:
-      # await bot.change_presence(activity=discord.Game(name=f"Аптайм: {str(datetime.datetime.now() - start_time).split('.')[0]}"))
-
-      if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
-        await bot.get_channel(854994534391218176).send('<@783836872924987422>, <@940246956649873428>, <@711122945619263539>, <@874847454959378494>, <@1035626825277263902>, <@926917101355171852>, <@1027971828548903032>\Скидываем карту.')
-      if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Sunday_10_00_00':
-        await bot.get_channel(854994534391218176).send('тест')
-      
-      await asyncio.sleep(1)
-
-## Переменные
-
 allowed_users = [695684705328169060, 617415875947003915]
-allowed_roles = [964807055980523520]
-moderator_roles = [1030023894968565821, 964807055980523520, 854993494107750402, 960495606596517931, 873268262555750471, 975329806520553503, 1050457595963523203]
-mapchecker_role = [1068946458201575605]
 
-## Ивенты
-
-@bot.event
-async def on_message(message):
-  if message.author == bot.user: return
-  mess = message.content.lower()
-  mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
-  if pon(mess):
-    await message.reply('пидораст ты', mention_author=True)
-  await bot.process_commands(message)
-
-@bot.event
-async def on_raw_message_edit(payload):
-  mess = payload.data['content']
-  mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
-  if pon(mess):
-    await bot.get_channel(payload.channel_id).send('пидораст ты')
-
-@bot.event
-async def on_member_remove(member):
-  async for log in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.kick):
-      if log.target == member and log.user.bot:
-          return
-
-  roles_str = ''
-  for role in member.roles:
-      if role.name != '@everyone':
-          roles_str += f'<@&{role.id}>\n'
-
-  date_format = "%d.%m.%Y %H:%M:%S"
-
-  join_date_str = member.joined_at.strftime(date_format) if member.joined_at else 'неизвестно'
-  leave_date_str = datetime.datetime.now().strftime(date_format)
-
-  channel = bot.get_channel(1056222809057132635)
-
-  embed = discord.Embed(
-    title='**Участник покинул сервер!**',
-    description=f'Дискорд тег человека: `{member}`\nДата входа на сервер: `{join_date_str}`\nДата выхода из сервера: `{leave_date_str}`',
-    color=discord.Colour.red()
-  )
-
-  embed.add_field(name='ID', value=f'{member.id}')
-  embed.add_field(name='Роли которые были при выходе', value=f'{roles_str}', inline=False)
-
-  await channel.send(f'<@{member.id}> покинул сервер', embed = embed)
-
-
-@bot.event
-async def on_member_join(member):
-    timezone = pytz.timezone("Europe/Moscow")
-    time_now = datetime.datetime.now(timezone)
-
-    days = 7
-
-    account_created_date = member.created_at
-    days_since_creation = (time_now - account_created_date).days
-
-    if days_since_creation < days:
-        dm_channel = await member.create_dm()
-        send_channel = bot.get_channel(1056222809057132635)
-        
-        await dm_channel.send("Мы заметили, что вашему аккаунту меньше 7 дней, поэтому вам необходимо немного подождать, прежде чем присоединяться к нашему серверу.\n\nЭто связано с частыми случаями обхода блокировки на нашем сервере, если вы добропорядочный пользователь, то вам придется подождать 7 дней.\n\nЗа дополнительной информацией отпишите в Telegram: `@saberkovich`")
-
-        embed = discord.Embed(
-            title='**Участник был кикнут из-за малого возраста аккаунта!**',
-            description=f'Дискорд тег человека: `{member}`\nID человека: `{member.id}`',
-            color=discord.Colour.red()
-        )
-
-        await send_channel.send(embed = embed)
-        print(f'\n\nКикнут с сервера:\n{member}\n\n')
-        await asyncio.sleep(2)
-        await member.kick(reason="Недостаточный возраст аккаунта")
-
-    if days_since_creation > days:
-        created_at = member.created_at.strftime("%d.%m.%Y %H:%M:%S") if member.created_at else 'неизвестно'
-
-        embed = discord.Embed(
-            title = '**Участник присоединился к серверу**',
-            description= f'Дискорд тег человека: `{member}`\nАккаунт создан: `{created_at}`',
-            color = discord.Colour.green()
-        )
-        embed.add_field(name='ID', value=f'{member.id}')
-        await bot.get_channel(1056222809057132635).send(f'<@{member.id}> зашёл на сервер', embed = embed)
-
-        welcome_embed = discord.Embed(
-            title = 'Добро пожаловать на сервер!',
-            description='Добро пожаловать на сервер **BFG Game Developer**!\n\nВсю нужную вам информацию можно прочитать в канале <#864854156842106910>, так же если имеются вопросы то вы можете спросить их в канале <#1047097724710944809>а.\n\n(Так же подписывайтесь на наш Telegram канал: https://t.me/teleportal_news)',
-            color = discord.Colour.green()
-        )
-        welcome_embed.set_footer(text='Желаем удачи')
-
-        dm_channel = await member.create_dm()
-        await dm_channel.send(f'<@{member.id}>,', embed = welcome_embed)
-
-
-## Команды
-
-@bot.command()
-async def хелп(ctx):
-  embed = discord.Embed(
-    title = '**Список команд**',
-    description = '`>привет` - Приветствие бота\n`>повтори (сообщение)` - Бот повторит ваше сообщение\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>тестэмбед` - тестовый эмбед',
-    color = discord.Colour.random()
-  )
-
-  await ctx.send(embed = embed)
-
-@bot.command()
-async def привет(ctx):
-  await ctx.send(f'Приветик, {ctx.message.author.mention}!')
-
-@bot.command()
-async def повтори(ctx, *, arg):
-  await ctx.send(arg)
-
-@bot.command()
-async def очистить(ctx, count):
-  try:
-    count = int(count)
-  except:
-    await ctx.send('>очистить (число)')
-    return
-  try:
-    if ctx.message.author.guild_permissions.administrator:
-      if count > 0 and count <= 100:
-        await ctx.channel.purge(limit=count+1)
-      else:
-        await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
-    else:
-      await ctx.send('Вам нельзя использовать эту команду!')
-  except:
-    await ctx.send('Кажется я не могу удалять сообщения')
-    return
-
-@bot.command()
-async def напомни(ctx, ttime, *, text = 'None'):
-    try:
-      n = ttime + '+0300'
-      a = datetime.datetime.strptime(n, '%d.%m.%Y_%H:%M%z')
-      t = datetime.datetime.now(pytz.timezone("Europe/Moscow"))
-      sa = a.timestamp()
-      st = t.timestamp()
-      time = int(sa) - int(st)
-      if time > 0:
-        message = await ctx.reply('Напоминание сработает <t:' + str(int(sa)) + ':R>')
-        edit = 'Напоминание сработало <t:' + str(int(sa)) + ':R>'
-        while time != 0:
-          time -= 1
-          print(time,text)
-          await asyncio.sleep(1)
-        if text == 'None':
-          await message.edit(content = edit)
-          await ctx.reply('Напоминание без текста')
-        else:
-          await message.edit(content = edit)
-          await ctx.reply(ctx.message.author.mention + ', ' + text)
-      else:
-        await ctx.send('Пишите **будущую московскую** дату')
-    except:
-          await ctx.send('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
-
-@bot.command()
-async def стартуй(ctx, count :int):
+@bot.command
+async def load(ctx, extension):
   if ctx.author.id in allowed_users:
-    n = 0
-    while n < count:
-      n += 1
-      await ctx.send(n)
+    bot.load_extension(f"cogs.{extension}")
+    await ctx.send("Cogs is loaded...")
+  else:
+    await ctx.send('Вы не резраб')
 
-## Тест команды
+@bot.command
+async def unload(ctx, extension):
+  if ctx.author.id in allowed_users:
+    bot.unload_extension(f"cogs.{extension}")
+    await ctx.send("Cogs is unloaded...")
+  else:
+    await ctx.send('Вы не резраб')
 
-@bot.command()
-async def тестэмбед(ctx):
-  roles_str = ''
-  for role in ctx.author.roles:
-      if role.name != '@everyone':
-          roles_str += f'<@&{role.id}>\n'
-  
-  embed = discord.Embed(
-    title='**Тест!**',
-    description=f'Дискорд тег человека: `1`\nID человека: `1`',
-    color=discord.Colour.purple()
-  )
+@bot.command
+async def reload(ctx, extension):
+  if ctx.author.id in allowed_users:
+    bot.unload_extension(f"cogs.{extension}")
+    bot.load_extension(f"cogs.{extension}")
+    await ctx.send("Cogs is reloaded...")
+  else:
+    await ctx.send('Вы не резраб')
 
-  embed.add_field(name='Ваши роли', value=f'{roles_str}', inline=False)
-
-  await ctx.send(embed = embed)
-
-## Запуск бота
+for filename in os.listdir("./cogs"):
+  if filename.endswith(".py"):
+    bot.load_extension(f"cogs.{filename[:-3]}")
 
 bot.run('MTA3NzIzMzUzMTMyNDk5NzY3Mg.GqgPxz.X6Vw46JT6gifRMny4s3L_Jd6G4xYB-gTMjflNs')
