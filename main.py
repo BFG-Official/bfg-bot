@@ -5,11 +5,12 @@ import pytz
 import datetime
 # Это простой комментарий чтобы комитать
 
-def pon():
-  for p in ['п','П','π','p']:
-    for o in ['о','О','o','O','0','о́']:
-      for n in ['н','Н','H']:
-        return ' ' + p + o + n + ' '
+def pon(message):
+  for p in ['п','П','π','p','P']:
+    for o in ['о','О','o','O','0']:
+      for n in ['н','Н','H','n','N']:
+        if (' ' + p + o + n + ' ' in message):
+          return True
 
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 bot.remove_command('help')
@@ -51,7 +52,7 @@ async def on_message(message):
   if message.author == bot.user: return
   mess = message.content.lower()
   mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
-  if pon() in mess:
+  if pon(mess):
     await message.reply('пидораст ты', mention_author=True)
   await bot.process_commands(message)
 
@@ -59,7 +60,7 @@ async def on_message(message):
 async def on_raw_message_edit(payload):
   mess = payload.data['content']
   mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','') + ' '
-  if pon() in mess:
+  if pon(mess):
     await bot.get_channel(payload.channel_id).send('пидораст ты')
 
 @bot.event
