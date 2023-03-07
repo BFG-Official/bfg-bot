@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
-import pytz, datetime, asyncio
+import pytz, datetime, asyncio, sqlite3
+
+connection = sqlite3.connect('server.db')
+cursor = connection.cursor()
 
 class Events(commands.Cog):
 
@@ -8,8 +11,59 @@ class Events(commands.Cog):
         self.client = client
     
     @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
+        user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
+        if message.author.bot: return
+        if user.bot: return
+        if message.author.id == user.id: return
+        if payload.emoji.name == 'mark_yes':
+            cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
+            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
+                color=discord.Colour.green()
+            ))
+        elif payload.emoji.name == 'mark_no':
+            cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
+            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
+                color=discord.Colour.red()
+            ))
+
+
+    
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
+        user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
+        if message.author.bot: return
+        if user.bot: return
+        if message.author.id == user.id: return
+        if payload.emoji.name == 'mark_yes':
+            cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
+            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{message.author.name}**__ понижена до {rep} | `-1`',
+                color=discord.Colour.red()
+            ))
+
+        elif payload.emoji.name == 'mark_no':
+            cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
+            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{message.author.name}**__ повышена до {rep} | `+1`',
+                color=discord.Colour.green()
+            ))
+    
+    @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == commands.Bot.user: return
+        if message.author.bot: return
         mess = message.content.lower()
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for p in ['п','П','π','p','P']:
@@ -30,6 +84,7 @@ class Events(commands.Cog):
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
+        if member.bot: return
         async for log in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.kick):
             if log.target == member and log.user.bot:
                 return
@@ -59,6 +114,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        if member.bot: return
         timezone = pytz.timezone("Europe/Moscow")
         time_now = datetime.datetime.now(timezone)
 
@@ -86,6 +142,7 @@ class Events(commands.Cog):
             await member.kick(reason="Недостаточный возраст аккаунта")
 
         if days_since_creation > days:
+            # Сообщение о входе
             created_at = member.created_at.strftime("%d.%m.%Y %H:%M:%S") if member.created_at else 'неизвестно'
 
             embed = discord.Embed(
@@ -105,6 +162,12 @@ class Events(commands.Cog):
 
             dm_channel = await member.create_dm()
             await dm_channel.send(f'<@{member.id}>,', embed = welcome_embed)
+            # Создание данных о пользователе
+            if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
+                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 0, 0, 0)")
+                connection.commit()
+            else:
+                pass
 
 async def setup(client):
     await client.add_cog(Events(client))

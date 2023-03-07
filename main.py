@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import pytz, datetime, asyncio
+import pytz, datetime, asyncio, sqlite3
 
 bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
 bot.remove_command('help')
@@ -9,8 +9,30 @@ allowed_users = [695684705328169060, 617415875947003915]
 
 cogs = ['admin','base','events','test']
 
+connection = sqlite3.connect('server.db')
+cursor = connection.cursor()
+
 @bot.event
 async def on_ready():
+    # Проверка пользователей
+    cursor.execute("""CREATE TABLE IF NOT EXISTS users (
+        id INT,
+        rep BIGINT,
+        lvl INT,
+        bankcash BIGINT,
+        cash BIGINT
+    )""")
+
+    for guild in bot.guilds:
+        for member in guild.members:
+            if member.bot: pass
+            if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
+                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 0, 0, 0)")
+            else:
+                pass
+    
+    connection.commit()
+
     # Загрузка команд
     for extension in cogs:
         await bot.load_extension(f'cogs.{extension}')
