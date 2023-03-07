@@ -26,39 +26,6 @@ class Test(commands.Cog):
                 color = discord.Colour.random()
             ))
     
-    '''@commands.command()
-    async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
-        if member is None: return ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
-        if member.bot: return ctx.send('У ботов нет рейтинга')
-        if amount is None: return ctx.send('Укажите на сколько изменить репутацию')
-        cursor.execute("UPDATE users SET rep = rep + {} WHERE id = {}".format(amount, member.id))
-        connection.commit()
-        rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
-        if amount < 0:  
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
-                color = discord.Colour.red()
-            ))
-            await ctx.reply(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
-                color = discord.Colour.red()
-            ))
-            return
-        if amount > 0:
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
-                color = discord.Colour.green()
-            ))
-            await ctx.reply(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
-                color = discord.Colour.green()
-            ))
-            return'''
-
-
-    
-    
 
 async def setup(client):
     await client.add_cog(Test(client))

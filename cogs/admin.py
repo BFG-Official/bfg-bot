@@ -1,5 +1,10 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
+import sqlite3
+
+connection = sqlite3.connect('server.db')
+cursor = connection.cursor()
 
 allowed_users = [695684705328169060, 617415875947003915]
 allowed_roles = [964807055980523520]
@@ -22,5 +27,62 @@ class Admin(commands.Cog):
         except:
             await ctx.send('Кажется я не могу удалять сообщения')
     
+    @commands.command()
+    async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
+        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
+        if member is None: return ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
+        if member.bot: return ctx.send('У ботов нет рейтинга')
+        if amount is None: return ctx.send('Укажите на сколько изменить репутацию')
+        cursor.execute("UPDATE users SET rep = rep + {} WHERE id = {}".format(amount, member.id))
+        connection.commit()
+        rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
+        if amount < 0:  
+            '''await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
+                color = discord.Colour.red()
+            ))'''
+            await ctx.reply(embed = discord.Embed(
+                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
+                color = discord.Colour.red()
+            ))
+            return
+        if amount > 0:
+            '''await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
+                color = discord.Colour.green()
+            ))'''
+            await ctx.reply(embed = discord.Embed(
+                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
+                color = discord.Colour.green()
+            ))
+            return
+    
+    @commands.command()
+    async def cleardb(self, ctx, namedb: str = None, *, reason: str = 'Без причины'):
+        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
+        if namedb is None: return ctx.send('Вы не указали тип переменной `>cleardb (тип)`')
+        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return ctx.send('Существуют только `rep, lvl, bankcash, cash`')
+        cursor.execute("UPDATE users SET {} = 0".format(namedb))
+        connection.commit()
+        await ctx.send(embed = discord.Embed(
+            description=f'Переменная {namedb} обнулена у всех участников по причине __**{reason}**__',
+            color = discord.Colour.random()
+        ))
+    
+    @commands.command()
+    async def changedb(self, ctx, namedb: str = None, member: discord.Member = None, changed = None, *, reason: str = 'Без причины'):
+        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
+        if namedb is None: return ctx.send('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
+        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return ctx.send('Существуют только типы `rep, lvl, bankcash, cash`')
+        if namedb in ['rep', 'lvl', 'bankcash', 'cash']:
+            try: changed = int(changed)
+            except: return ctx.send('Для этих переменных значение должно быть число')
+        cursor.execute("UPDATE users SET {} = '{}' WHERE id = {}".format(namedb, changed, member.id))
+        connection.commit()
+        await ctx.send(embed = discord.Embed(
+            description=f'Переменная __**{namedb}**__ у участника __**{member}**__ изменена на __**{changed}**__ по причине __**{reason}**__',
+            color = discord.Colour.random()
+        ))
+
 async def setup(client):
     await client.add_cog(Admin(client))

@@ -48,7 +48,7 @@ class Events(commands.Cog):
             connection.commit()
             rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author.name}**__ понижена до {rep} | `-1`',
+                description=f'Репутация __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
                 color=discord.Colour.red()
             ))
 
@@ -57,7 +57,7 @@ class Events(commands.Cog):
             connection.commit()
             rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author.name}**__ повышена до {rep} | `+1`',
+                description=f'Репутация __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
                 color=discord.Colour.green()
             ))'''
     
