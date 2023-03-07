@@ -26,7 +26,7 @@ class Test(commands.Cog):
                 color = discord.Colour.random()
             ))
     
-    @commands.command()
+    '''@commands.command()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
         if member is None: return ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
@@ -54,7 +54,7 @@ class Test(commands.Cog):
                 description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
                 color = discord.Colour.green()
             ))
-            return
+            return'''
 
 
     
