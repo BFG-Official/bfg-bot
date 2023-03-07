@@ -22,5 +22,5 @@ class Admin(commands.Cog):
         except:
             await ctx.send('Кажется я не могу удалять сообщения')
     
-def setup(client):
-    client.add_cog(Admin(client))
+async def setup(client):
+    await client.add_cog(Admin(client))

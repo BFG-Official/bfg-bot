@@ -1,35 +1,11 @@
 import discord
 from discord.ext import commands
-import asyncio
-import pytz
-import datetime
+import pytz, datetime, asyncio
 
 class Events(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-    
-    @commands.Cog.listener()
-    async def on_ready(self):
-        timezone = pytz.timezone("Europe/Moscow")
-        time_now = datetime.datetime.now(timezone)
-
-        time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
-
-        # await commands.Bot.change_presence(self.client ,activity=discord.Game(name="Включаюсь..."))
-        await commands.Bot.get_channel(self.client, 1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот [МСК]: `{time_str}`")
-        print('BFG-bot готов к работе!')
-        # start_time = datetime.datetime.now()
-
-        while True:
-            # await commands.Bot.change_presence(self.client, activity=discord.Game(name=f"Аптайм: {str(datetime.datetime.now() - start_time).split('.')[0]}"))
-
-            '''if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Saturday_20_00_00':
-                await commands.Bot.get_channel(self.client, 854994534391218176).send('<@783836872924987422>, <@940246956649873428>, <@711122945619263539>, <@874847454959378494>, <@1035626825277263902>, <@926917101355171852>, <@1027971828548903032>\Скидываем карту.')
-            if datetime.datetime.now(timezone).strftime('%A_%H_%M_%S') == 'Sunday_10_00_00':
-                await commands.Bot.get_channel(self.client, 854994534391218176).send('тест')'''
-            
-            await asyncio.sleep(1)
     
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -130,5 +106,5 @@ class Events(commands.Cog):
             dm_channel = await member.create_dm()
             await dm_channel.send(f'<@{member.id}>,', embed = welcome_embed)
 
-def setup(client):
-    client.add_cog(Events(client))
+async def setup(client):
+    await client.add_cog(Events(client))

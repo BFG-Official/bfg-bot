@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
-import asyncio
-import datetime
-import pytz
+import pytz, datetime, asyncio
 
 class Base(commands.Cog):
 
@@ -55,5 +53,5 @@ class Base(commands.Cog):
             await ctx.send('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
 
 
-def setup(client):
-    client.add_cog(Base(client))
+async def setup(client):
+    await client.add_cog(Base(client))
