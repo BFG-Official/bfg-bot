@@ -21,9 +21,9 @@ class Base(commands.Cog):
     async def привет(self, ctx):
         await ctx.send(f'Приветик, {ctx.message.author.mention}!')
     
-    @commands.command()
-    async def повтори(self, ctx, *, arg):
-        await ctx.send(arg)
+    # @commands.command()
+    # async def повтори(self, ctx, *, arg):
+    #     await ctx.send(arg)
     
     @commands.command()
     async def напомни(self, ctx, ttime, *, text = 'None'):
