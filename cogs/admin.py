@@ -29,10 +29,10 @@ class Admin(commands.Cog):
     
     @commands.command()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
-        if member is None: return ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
-        if member.bot: return ctx.send('У ботов нет рейтинга')
-        if amount is None: return ctx.send('Укажите на сколько изменить репутацию')
+        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
+        if member is None: return await ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
+        if member.bot: return await ctx.send('У ботов нет рейтинга')
+        if amount is None: return await ctx.send('Укажите на сколько изменить репутацию')
         cursor.execute("UPDATE users SET rep = rep + {} WHERE id = {}".format(amount, member.id))
         connection.commit()
         rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
@@ -59,9 +59,9 @@ class Admin(commands.Cog):
     
     @commands.command()
     async def cleardb(self, ctx, namedb: str = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
-        if namedb is None: return ctx.send('Вы не указали тип переменной `>cleardb (тип)`')
-        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return ctx.send('Существуют только `rep, lvl, bankcash, cash`')
+        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
+        if namedb is None: return await ctx.send('Вы не указали тип переменной `>cleardb (тип)`')
+        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.send('Существуют только `rep, lvl, bankcash, cash`')
         cursor.execute("UPDATE users SET {} = 0".format(namedb))
         connection.commit()
         await ctx.send(embed = discord.Embed(
@@ -71,12 +71,12 @@ class Admin(commands.Cog):
     
     @commands.command()
     async def changedb(self, ctx, namedb: str = None, member: discord.Member = None, changed = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return ctx.send('У вас нет доступа!')
-        if namedb is None: return ctx.send('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
-        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return ctx.send('Существуют только типы `rep, lvl, bankcash, cash`')
+        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
+        if namedb is None: return await ctx.send('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
+        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.send('Существуют только типы `rep, lvl, bankcash, cash`')
         if namedb in ['rep', 'lvl', 'bankcash', 'cash']:
             try: changed = int(changed)
-            except: return ctx.send('Для этих переменных значение должно быть число')
+            except: return await ctx.send('Для этих переменных значение должно быть число')
         cursor.execute("UPDATE users SET {} = '{}' WHERE id = {}".format(namedb, changed, member.id))
         connection.commit()
         await ctx.send(embed = discord.Embed(
