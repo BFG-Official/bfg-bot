@@ -54,6 +54,8 @@ class Events(commands.Cog):
                 connection.commit()
                 if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
                 if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
+                cursor.execute("UPDATE users SET is_bot_remove_react = 0 WHERE id = {}".format(user.id))
+                connection.commit()
                 if int(cursor.execute("SELECT reps FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
                     await dm_channel.send(embed=discord.Embed(
                         description = 'Ваше количество репутационных реакций __**закончилось**__. Оно обновится через __**12 часов**__ после проставления первой реакции.',
