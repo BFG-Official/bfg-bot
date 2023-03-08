@@ -18,20 +18,30 @@ async def on_ready():
     cursor.execute("""CREATE TABLE IF NOT EXISTS users (
         id INT,
         rep BIGINT,
-        lvl INT,
-        bankcash BIGINT,
-        cash BIGINT
+        reps INT,
+        first_rep INT,
+        second_rep INT,
+        old_rep_message_author_id INT,
+        is_bot_remove_react INT,
+        lvl INT
     )""")
 
     for guild in bot.guilds:
         for member in guild.members:
             if member.bot: pass
             if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
-                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 0, 0, 0)")
+                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 3, 1, 1, 0, 0, 0)")
             else:
                 pass
-    
     connection.commit()
+    cursor.execute("UPDATE users SET reps = 3")
+    cursor.execute("UPDATE users SET first_rep = 1")
+    cursor.execute("UPDATE users SET second_rep = 1")
+    cursor.execute("UPDATE users SET old_rep_message_author_id = 0")
+    cursor.execute("UPDATE users SET is_bot_remove_react = 0")
+    connection.commit()
+
+    print('База данных подключена')
 
     # Загрузка команд
     for extension in cogs:

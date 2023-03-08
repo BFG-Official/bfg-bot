@@ -65,7 +65,7 @@ class Admin(commands.Cog):
         cursor.execute("UPDATE users SET {} = 0".format(namedb))
         connection.commit()
         await ctx.send(embed = discord.Embed(
-            description=f'Переменная {namedb} обнулена у всех участников по причине __**{reason}**__',
+            description=f'Переменная __**{namedb}**__ обнулена у всех участников по причине __**{reason}**__',
             color = discord.Colour.random()
         ))
     

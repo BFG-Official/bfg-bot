@@ -1,68 +1,128 @@
 import discord
 from discord.ext import commands
+from threading import Timer
 import pytz, datetime, asyncio, sqlite3
 
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
+first_time_rep = 60 * 3
+second_time_rep = 60 * 60 * 12
+third_time_rep = 60 * 60 * 3
+
+async def first_rep(user_id):
+    cursor.execute("UPDATE users SET first_rep = 0 WHERE id = {}".format(user_id))
+    connection.commit()
+    await asyncio.sleep(first_time_rep)
+    cursor.execute("UPDATE users SET first_rep = 1 WHERE id = {}".format(user_id))
+    connection.commit()
+
+async def second_rep(user_id):
+    cursor.execute("UPDATE users SET reps = reps - 1 WHERE id = {}".format(user_id))
+    connection.commit()
+    await first_rep(user_id)
+    await asyncio.sleep(second_time_rep - first_time_rep)
+    cursor.execute("UPDATE users SET reps = 3 WHERE id = {}".format(user_id))
+    connection.commit()
+
+async def third_rep(user_id, message_author_id):
+    cursor.execute("UPDATE users SET old_rep_message_author_id = {} WHERE id = {}".format(message_author_id, user_id))
+    connection.commit()
+    await first_rep(user_id)
+    await asyncio.sleep(third_time_rep - first_time_rep)
+    if int(cursor.execute("SELECT old_rep_message_author_id FROM users WHERE id = {}".format(user_id)).fetchone()[0]) == message_author_id:
+        cursor.execute("UPDATE users SET old_rep_message_author_id = 0 WHERE id = {}".format(user_id))
+        connection.commit()
 
 class Events(commands.Cog):
 
     def __init__(self, client):
         self.client = client
     
-    '''@commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+        if not (payload.channel_id == 1066794825971679282): return #Пока не нужное
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
         if message.author.bot: return
         if user.bot: return
         if message.author.id == user.id: return
-        if payload.emoji.name == 'mark_yes':
-            cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
-            connection.commit()
-            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
-                color=discord.Colour.green()
-            ))
-        elif payload.emoji.name == 'mark_no':
-            cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
-            connection.commit()
-            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
-                color=discord.Colour.red()
-            ))
+        dm_channel = await user.create_dm()
+        cursor.execute("UPDATE users SET is_bot_remove_react = 0 WHERE id = {}".format(user.id))
+        connection.commit()
+        if payload.emoji.name in ['mark_yes','mark_no']:
+            if int(cursor.execute("SELECT first_rep FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0 or int(cursor.execute("SELECT reps FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0 or int(cursor.execute("SELECT old_rep_message_author_id FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == message.author.id:
+                cursor.execute("UPDATE users SET is_bot_remove_react = 1 WHERE id = {}".format(user.id))
+                connection.commit()
+                if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
+                if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
+                if int(cursor.execute("SELECT reps FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
+                    await dm_channel.send(embed=discord.Embed(
+                        description = 'Ваше количество репутационных реакций __**закончилось**__. Оно обновится через __**12 часов**__ после проставления первой реакции.',
+                        color = discord.Colour.random()
+                    ))
+                    return
+                if int(cursor.execute("SELECT first_rep FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
+                    await dm_channel.send(embed=discord.Embed(
+                        description = 'Вы можете ставить репутационную реакцию раз в __**3 минуты**__.',
+                        color = discord.Colour.random()
+                    ))
+                    return
+                if int(cursor.execute("SELECT old_rep_message_author_id FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == message.author.id:
+                    await dm_channel.send(embed=discord.Embed(
+                        description = 'Вы можете ставить репутационную реакцию на одного и того же человека раз в __**3 часа**__.',
+                        color = discord.Colour.random()
+                    ))
+                    return
+            if int(cursor.execute("SELECT first_rep FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1:
+                if payload.emoji.name == 'mark_yes':
+                    cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
+                    await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                        description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
+                        color = discord.Colour.green()
+                    ))
+                elif payload.emoji.name == 'mark_no':
+                    cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
+                    await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                        description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
+                        color = discord.Colour.red()
+                    ))
+                if int(cursor.execute("SELECT reps FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 3:
+                    await second_rep(user.id)
+                    return
+                if int(cursor.execute("SELECT old_rep_message_author_id FROM users WHERE id = {}".format(user.id)).fetchone()[0]) != message.author.id:
+                    await third_rep(user.id, message.author.id)
+                    return
+                cursor.execute("UPDATE users SET reps = reps - 1 WHERE id = {}".format(user.id))
+                connection.commit()
+                await first_rep(user.id)
 
-
-    
+        
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
+        if not (payload.channel_id == 1066794825971679282): return #Пока не нужное
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
         if message.author.bot: return
         if user.bot: return
         if message.author.id == user.id: return
         if payload.emoji.name == 'mark_yes':
+            if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
-            connection.commit()
-            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
-                color=discord.Colour.red()
+            await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
+                color = discord.Colour.red()
             ))
-
         elif payload.emoji.name == 'mark_no':
+            if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
-            connection.commit()
-            rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])
-            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
-                color=discord.Colour.green()
-            ))'''
+            await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
+                color = discord.Colour.green()
+            ))
     
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.channel.id in [1048466435556515890, 1048513739558752276]: return
         if message.author.bot: return
         mess = message.content.lower()
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
@@ -74,6 +134,7 @@ class Events(commands.Cog):
     
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
+        if payload.channel_id in [1048466435556515890, 1048513739558752276]: return
         mess = payload.data['content']
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for p in ['п','П','π','p','P']:

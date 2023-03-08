@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
-import pytz, datetime, asyncio
+import pytz, datetime, asyncio, sqlite3
+
+connection = sqlite3.connect('server.db')
+cursor = connection.cursor()
 
 class Base(commands.Cog):
 
@@ -11,20 +14,29 @@ class Base(commands.Cog):
     async def хелп(self, ctx):
         embed = discord.Embed(
             title = '**Список команд**',
-            description = '`>привет` - Приветствие бота\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>тестэмбед` - тестовый эмбед',
+            description = '`>привет` - Приветствие бота\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>репутация` - Бот покажет вашу репутпцию',
             color = discord.Colour.random()
         )
 
         await ctx.send(embed = embed)
     
     @commands.command()
+    async def репутация(self, ctx, member: discord.Member = None):
+        if member is None:
+            await ctx.send(embed = discord.Embed(
+                description=f'Репутация пользователя __**{ctx.author}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]}**__',
+                color = discord.Colour.random()
+            ))
+        else:
+            await ctx.send(embed = discord.Embed(
+                description=f'Репутация пользователя __**{member}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0]}**__',
+                color = discord.Colour.random()
+            ))
+    
+    @commands.command()
     async def привет(self, ctx):
         await ctx.send(f'Приветик, {ctx.message.author.mention}!')
-    
-    # @commands.command()
-    # async def повтори(self, ctx, *, arg):
-    #     await ctx.send(arg)
-    
+
     @commands.command()
     async def напомни(self, ctx, ttime, *, text = 'None'):
         try:
