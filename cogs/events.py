@@ -40,7 +40,6 @@ class Events(commands.Cog):
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if not (payload.channel_id == 1066794825971679282): return #Пока не нужное
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
         if message.author.bot: return
@@ -76,13 +75,13 @@ class Events(commands.Cog):
             if int(cursor.execute("SELECT first_rep FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1:
                 if payload.emoji.name == 'mark_yes':
                     cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
-                    await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                    await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                         description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
                         color = discord.Colour.green()
                     ))
                 elif payload.emoji.name == 'mark_no':
                     cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
-                    await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+                    await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                         description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
                         color = discord.Colour.red()
                     ))
@@ -99,7 +98,6 @@ class Events(commands.Cog):
         
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        if not (payload.channel_id == 1066794825971679282): return #Пока не нужное
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
         if message.author.bot: return
@@ -108,14 +106,14 @@ class Events(commands.Cog):
         if payload.emoji.name == 'mark_yes':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
-            await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                 description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
                 color = discord.Colour.red()
             ))
         elif payload.emoji.name == 'mark_no':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
-            await commands.Bot.get_channel(self.client, 1066794825971679282).send(embed=discord.Embed(
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                 description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
                 color = discord.Colour.green()
             ))
