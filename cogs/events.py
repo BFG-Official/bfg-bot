@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from threading import Timer
 import pytz, datetime, asyncio, sqlite3
 
 connection = sqlite3.connect('server.db')
@@ -54,7 +53,7 @@ class Events(commands.Cog):
                 connection.commit()
                 if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
                 if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 cursor.execute("UPDATE users SET is_bot_remove_react = 0 WHERE id = {}".format(user.id))
                 connection.commit()
                 if int(cursor.execute("SELECT reps FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
@@ -78,12 +77,14 @@ class Events(commands.Cog):
             if int(cursor.execute("SELECT first_rep FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1:
                 if payload.emoji.name == 'mark_yes':
                     cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
+                    connection.commit()
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                         description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
                         color = discord.Colour.green()
                     ))
                 elif payload.emoji.name == 'mark_no':
                     cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
+                    connection.commit()
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                         description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
                         color = discord.Colour.red()
@@ -109,6 +110,7 @@ class Events(commands.Cog):
         if payload.emoji.name == 'mark_yes':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep - 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                 description = f'Репутация участника __**{message.author}**__ понижена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `-1`',
                 color = discord.Colour.red()
@@ -116,6 +118,7 @@ class Events(commands.Cog):
         elif payload.emoji.name == 'mark_no':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 1: return
             cursor.execute("UPDATE users SET rep = rep + 1 WHERE id = {}".format(message.author.id))
+            connection.commit()
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                 description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
                 color = discord.Colour.green()
