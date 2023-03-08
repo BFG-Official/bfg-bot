@@ -11,6 +11,10 @@ allowed_roles = [964807055980523520]
 moderator_roles = [1030023894968565821, 964807055980523520, 854993494107750402, 960495606596517931, 873268262555750471, 975329806520553503, 1050457595963523203]
 mapchecker_role = [1068946458201575605]
 
+class UserInfo(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
 class Admin(commands.Cog):
 
     def __init__(self, client):
@@ -84,5 +88,23 @@ class Admin(commands.Cog):
             color = discord.Colour.random()
         ))
 
+    @commands.command()
+    @commands.has_role(moderator_roles)
+    async def userinfo(self, ctx, member: discord.Member = None):
+        member = ctx.author if not member else member
+        embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
+        embed.set_author(name=f"Информация о пользователе - {member}")
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.add_field(name="ID:", value=member.id, inline=True)
+        embed.add_field(name="Имя:", value=member.display_name, inline=True)
+        embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
+        await ctx.send(embed=embed)
+
+    @userinfo.error
+    async def userinfo_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("У вас нет прав на использование этой команды!")
+
 async def setup(client):
     await client.add_cog(Admin(client))
+    await client.add_cog(UserInfo(client))
