@@ -89,7 +89,7 @@ class Admin(commands.Cog):
         ))
 
     @commands.command()
-    @commands.has_role(moderator_roles)
+    @commands.has_any_role(moderator_roles)
     async def userinfo(self, ctx, member: discord.Member = None):
         member = ctx.author if not member else member
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
