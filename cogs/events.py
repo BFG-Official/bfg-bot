@@ -38,7 +38,7 @@ class Events(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @commands.Cog.listener()
+    '''@commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
@@ -95,10 +95,10 @@ class Events(commands.Cog):
                     return
                 cursor.execute("UPDATE users SET reps = reps - 1 WHERE id = {}".format(user.id))
                 connection.commit()
-                await first_rep(user.id)
+                await first_rep(user.id)'''
 
         
-    @commands.Cog.listener()
+    '''@commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         user = commands.Bot.get_channel(self.client, payload.channel_id).guild.get_member(payload.user_id)
@@ -118,7 +118,7 @@ class Events(commands.Cog):
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed=discord.Embed(
                 description = f'Репутация участника __**{message.author}**__ повышена до __**{int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(message.author.id)).fetchone()[0])}**__ | `+1`',
                 color = discord.Colour.green()
-            ))
+            ))'''
     
     @commands.Cog.listener()
     async def on_message(self, message):
