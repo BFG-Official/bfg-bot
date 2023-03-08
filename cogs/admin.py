@@ -14,6 +14,7 @@ mapchecker_role = [1068946458201575605]
 class UserInfo(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.moderator_roles_list = [moderator_roles]
 
 class Admin(commands.Cog):
 
@@ -89,7 +90,7 @@ class Admin(commands.Cog):
         ))
 
     @commands.command()
-    @commands.has_any_role(moderator_roles)
+    @commands.has_any_role(*moderator_roles_list)
     async def userinfo(self, ctx, member: discord.Member = None):
         member = ctx.author if not member else member
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
