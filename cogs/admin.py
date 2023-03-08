@@ -90,8 +90,8 @@ class Admin(commands.Cog):
         ))
 
     @commands.command()
-    @commands.has_any_role(*moderator_roles_list)
     async def userinfo(self, ctx, member: discord.Member = None):
+        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
         member = ctx.author if not member else member
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
         embed.set_author(name=f"Информация о пользователе - {member}")
@@ -100,11 +100,6 @@ class Admin(commands.Cog):
         embed.add_field(name="Имя:", value=member.display_name, inline=True)
         embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
         await ctx.send(embed=embed)
-
-    @userinfo.error
-    async def userinfo_error(self, ctx, error):
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send("У вас нет прав на использование этой команды!")
 
 async def setup(client):
     await client.add_cog(Admin(client))
