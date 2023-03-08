@@ -67,7 +67,7 @@ class Events(commands.Cog):
         mess = message.content.lower()
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for p in ['п','П','π','p','P']:
-            for o in ['о','О','o','O','0']:
+            for o in ['о','О','o','O','0','ο']:
                 for n in ['н','Н','n','N','H','H']:
                     if (' ' + p + o + n + ' ' in mess):
                         await message.reply('пидораст ты', mention_author=True)
@@ -77,7 +77,7 @@ class Events(commands.Cog):
         mess = payload.data['content']
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for p in ['п','П','π','p','P']:
-            for o in ['о','О','o','O','0']:
+            for o in ['о','О','o','O','0','ο']:
                 for n in ['н','Н','n','N','H']:
                     if (' ' + p + o + n + ' ' in mess):
                         await commands.Bot.get_channel(self.client, payload.channel_id).send('пидораст ты')
