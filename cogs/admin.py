@@ -84,5 +84,17 @@ class Admin(commands.Cog):
             color = discord.Colour.random()
         ))
 
+    # @commands.command()
+    # async def userinfo(self, ctx, member: discord.Member = None):
+    #     if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
+    #     member = ctx.author if not member else member
+    #     embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
+    #     embed.set_author(name=f"Информация о пользователе - {member}")
+    #     embed.set_thumbnail(url=member.avatar_url)
+    #     embed.add_field(name="ID:", value=member.id, inline=True)
+    #     embed.add_field(name="Имя:", value=member.display_name, inline=True)
+    #     embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
+    #     await ctx.send(embed=embed)
+
 async def setup(client):
     await client.add_cog(Admin(client))
