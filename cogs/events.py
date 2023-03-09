@@ -239,7 +239,7 @@ class Events(commands.Cog):
             await dm_channel.send(f'<@{member.id}>,', embed = welcome_embed)
             # Создание данных о пользователе
             if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
-                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 0, 0, 0)")
+                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 3, 1, 1, '{'|0|'}', 0, 0, 0)")
                 connection.commit()
             else:
                 pass
