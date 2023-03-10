@@ -12,6 +12,13 @@ class Test(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+    
+    @commands.command()
+    async def тест(self, ctx):
+        await ctx.send(embed = discord.Embed(
+            description = f'[Сообщение](https://discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id})'
+        ))
+
 
 async def setup(client):
     await client.add_cog(Test(client))

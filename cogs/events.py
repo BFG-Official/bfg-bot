@@ -46,7 +46,7 @@ class Events(commands.Cog):
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                        description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
+                        description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                         color = discord.Colour.green()
                     ))
                 elif payload.emoji.name == 'mark_no':
@@ -54,7 +54,7 @@ class Events(commands.Cog):
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                        description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
+                        description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                         color = discord.Colour.red()
                     ))
                 cursor.execute(f"UPDATE users SET first_rep = 0 WHERE id = {user.id}")
@@ -121,7 +121,7 @@ class Events(commands.Cog):
                 connection.commit()
                 rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                 await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                    description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1`',
+                    description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                     color = discord.Colour.red()
                 ))
         elif payload.emoji.name == 'mark_no':
@@ -130,7 +130,7 @@ class Events(commands.Cog):
                 connection.commit()
                 rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                 await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                    description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1`',
+                    description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                     color = discord.Colour.green()
                 ))
     
@@ -140,7 +140,7 @@ class Events(commands.Cog):
         if message.author.bot: return
         mess = message.content.lower()
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
-        for p in ['п','П','π','p','P']:
+        for p in ['п','П','π','p','P','n']:
             for o in ['о','О','o','O','0','ο']:
                 for n in ['н','Н','n','N','H','H']:
                     if (' ' + p + o + n + ' ' in mess):
@@ -152,7 +152,7 @@ class Events(commands.Cog):
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         mess = payload.data['content']
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
-        for p in ['п','П','π','p','P']:
+        for p in ['п','П','π','p','P','n']:
             for o in ['о','О','o','O','0','ο']:
                 for n in ['н','Н','n','N','H']:
                     if (' ' + p + o + n + ' ' in mess):
