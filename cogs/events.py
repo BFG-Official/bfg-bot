@@ -39,9 +39,9 @@ class Events(commands.Cog):
         dm_channel = await user.create_dm()
         cursor.execute(f"UPDATE users SET is_bot_remove_react = 0 WHERE id = {user.id}")
         connection.commit()
-        if payload.emoji.name in ['mark_yes','mark_no']:
+        if payload.emoji.name in ['plusrep','minusrep']:
             if int(cursor.execute(f"SELECT first_rep FROM users WHERE id = {user.id}").fetchone()[0]) == 1 and int(cursor.execute(f"SELECT reps FROM users WHERE id = {user.id}").fetchone()[0]) > 0 and not (str(user.id) in str(cursor.execute(f"SELECT old_rep_user_id FROM users WHERE id = {message.author.id}").fetchone()[0])):
-                if payload.emoji.name == 'mark_yes':
+                if payload.emoji.name == 'plusrep':
                     cursor.execute(f"UPDATE users SET rep = rep + 1 WHERE id = {message.author.id}")
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
@@ -49,7 +49,7 @@ class Events(commands.Cog):
                         description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                         color = discord.Colour.green()
                     ))
-                elif payload.emoji.name == 'mark_no':
+                elif payload.emoji.name == 'minusrep':
                     cursor.execute(f"UPDATE users SET rep = rep - 1 WHERE id = {message.author.id}")
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
@@ -75,8 +75,8 @@ class Events(commands.Cog):
             elif int(cursor.execute(f"SELECT first_rep FROM users WHERE id = {user.id}").fetchone()[0]) == 0:
                 cursor.execute(f"UPDATE users SET is_bot_remove_react = 1 WHERE id = {user.id}")
                 connection.commit()
-                if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
-                if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
+                if payload.emoji.name == 'plusrep': await message.remove_reaction('<:plusrep:1083761863696851094>', user)
+                if payload.emoji.name == 'minusrep': await message.remove_reaction('<:minusrep:1083761892155203625>', user)
                 await dm_channel.send(embed = discord.Embed(
                     description = 'Вы можете ставить репутационнную реакцию раз в __**3 минуты**__',
                     color = discord.Colour.random()
@@ -86,8 +86,8 @@ class Events(commands.Cog):
             elif str(user.id) in str(cursor.execute(f"SELECT old_rep_user_id FROM users WHERE id = {message.author.id}").fetchone()[0]):
                 cursor.execute(f"UPDATE users SET is_bot_remove_react = 1 WHERE id = {user.id}")
                 connection.commit()
-                if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
-                if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
+                if payload.emoji.name == 'plusrep': await message.remove_reaction('<:plusrep:1083761863696851094>', user)
+                if payload.emoji.name == 'minusrep': await message.remove_reaction('<:minusrep:1083761892155203625>', user)
                 await dm_channel.send(embed = discord.Embed(
                     description = 'Вы можете ставить репутационню реакцию __**на одного участника**__ раз в __**3 часа**__',
                     color = discord.Colour.random()
@@ -97,8 +97,8 @@ class Events(commands.Cog):
             elif int(cursor.execute(f"SELECT reps FROM users WHERE id = {user.id}").fetchone()[0]) == 0:
                 cursor.execute(f"UPDATE users SET is_bot_remove_react = 1 WHERE id = {user.id}")
                 connection.commit()
-                if payload.emoji.name == 'mark_yes': await message.remove_reaction('<:mark_yes:864461637000101909>', user)
-                if payload.emoji.name == 'mark_no': await message.remove_reaction('<:mark_no:864461655407329322>', user)
+                if payload.emoji.name == 'plusrep': await message.remove_reaction('<:plusrep:1083761863696851094>', user)
+                if payload.emoji.name == 'minusrep': await message.remove_reaction('<:minusrep:1083761892155203625>', user)
                 await dm_channel.send(embed = discord.Embed(
                     description = 'Ваше количество репутационных реакций __**закончилось**__, они восстановятся через __**12 часов**__',
                     color = discord.Colour.random()
@@ -115,7 +115,7 @@ class Events(commands.Cog):
         if message.author.bot: return
         if user.bot: return
         if message.author.id == user.id: return
-        if payload.emoji.name == 'mark_yes':
+        if payload.emoji.name == 'plusrep':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
                 cursor.execute(f"UPDATE users SET rep = rep - 1 WHERE id = {message.author.id}")
                 connection.commit()
@@ -124,7 +124,7 @@ class Events(commands.Cog):
                     description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
                     color = discord.Colour.red()
                 ))
-        elif payload.emoji.name == 'mark_no':
+        elif payload.emoji.name == 'minusrep':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
                 cursor.execute(f"UPDATE users SET rep = rep + 1 WHERE id = {message.author.id}")
                 connection.commit()
