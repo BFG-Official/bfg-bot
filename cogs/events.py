@@ -146,16 +146,17 @@ class Events(commands.Cog):
                     if (' ' + p + o + n + ' ' in mess):
                         await message.reply('пидораст ты', mention_author=True)
     
-    '''@commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
         if payload.channel_id in [1048466435556515890, 1048513739558752276]: return
+        message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
         mess = payload.data['content']
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for p in ['п','П','π','p','P']:
             for o in ['о','О','o','O','0','ο']:
                 for n in ['н','Н','n','N','H']:
                     if (' ' + p + o + n + ' ' in mess):
-                        await commands.Bot.get_channel(self.client, payload.channel_id).send('пидораст ты')'''
+                        await message.reply('пидораст ты', mention_author=True)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
