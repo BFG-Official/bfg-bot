@@ -14,11 +14,27 @@ class Base(commands.Cog):
     async def хелп(self, ctx):
         embed = discord.Embed(
             title = '**Список команд**',
-            description = '`>привет` - Приветствие бота\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>репутация` - Бот покажет вашу репутпцию',
+            description = '`>привет` - Приветствие бота\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>репутация` - Бот покажет вашу репутпцию\n`>топ (название)` - Бот покажет таблицу лидеров',
             color = discord.Colour.random()
         )
 
         await ctx.send(embed = embed)
+
+    @commands.command()
+    async def топ(self, ctx, name :str = None):
+        if name is None: await ctx.send('Укажите название таблицы топов (репутации)')
+        if not (name in ['репутации']): await ctx.send('Такого названия таблицы лидеров не существует')
+        if name == 'репутации':
+            k = 0
+            s = ''
+            for top_rep in cursor.execute("SELECT id, rep FROM users ORDER BY rep DESC LIMIT 10"):
+                k += 1
+                s = s + f'{k}) __**{commands.Bot.get_user(self.client, top_rep[0])}**__ | __**{top_rep[1]}**__ репутации(-ия)\n'
+            await ctx.send(embed = discord.Embed(
+                title = '**Топ репутаций**',
+                description = s,
+                color = discord.Colour.random()
+            ))
     
     @commands.command()
     async def репутация(self, ctx, member: discord.Member = None):

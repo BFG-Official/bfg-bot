@@ -47,7 +47,7 @@ async def on_ready():
     # Загрузка команд
     for extension in cogs:
         await bot.load_extension(f'cogs.{extension}')
-        print(extension)
+        print('Модуль',extension, 'подключён')
     # Запуск бота
     timezone = pytz.timezone("Europe/Moscow")
     time_now = datetime.datetime.now(timezone)
