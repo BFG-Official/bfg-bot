@@ -37,23 +37,29 @@ class Admin(commands.Cog):
         connection.commit()
         rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
         if amount < 0:  
-            '''await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
-                color = discord.Colour.red()
-            ))'''
-            await ctx.reply(embed = discord.Embed(
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
                 description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
                 color = discord.Colour.red()
             ))
+            await ctx.reply(embed = discord.Embed(
+                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
+                color = discord.Colour.red()
+            ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
+            ))
             return
         if amount > 0:
-            '''await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
+            await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
                 description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
                 color = discord.Colour.green()
-            ))'''
+            ))
             await ctx.reply(embed = discord.Embed(
                 description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
                 color = discord.Colour.green()
+            ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
             ))
             return
     
@@ -67,6 +73,9 @@ class Admin(commands.Cog):
         await ctx.send(embed = discord.Embed(
             description=f'Переменная __**{namedb}**__ обнулена у всех участников по причине __**{reason}**__',
             color = discord.Colour.random()
+        ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
         ))
     
     @commands.command()
@@ -82,6 +91,9 @@ class Admin(commands.Cog):
         await ctx.send(embed = discord.Embed(
             description=f'Переменная __**{namedb}**__ у участника __**{member}**__ изменена на __**{changed}**__ по причине __**{reason}**__',
             color = discord.Colour.random()
+        ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
         ))
 
     # @commands.command()

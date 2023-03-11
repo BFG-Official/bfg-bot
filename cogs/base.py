@@ -12,13 +12,14 @@ class Base(commands.Cog):
     
     @commands.command()
     async def хелп(self, ctx):
-        embed = discord.Embed(
+        await ctx.send(embed = discord.Embed(
             title = '**Список команд**',
             description = '`>привет` - Приветствие бота\n`>очистить (кол-во)` - Бот очистит некоторое количество сообщений\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату\n`>репутация` - Бот покажет вашу репутпцию\n`>топ (название)` - Бот покажет таблицу лидеров',
             color = discord.Colour.random()
-        )
-
-        await ctx.send(embed = embed)
+        ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
+        ))
 
     @commands.command()
     async def топ(self, ctx, name :str = None):
@@ -41,6 +42,9 @@ class Base(commands.Cog):
                 title = '**Топ репутаций**',
                 description = s + s2,
                 color = discord.Colour.random()
+            ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
             ))
     
     @commands.command()
@@ -49,11 +53,17 @@ class Base(commands.Cog):
             await ctx.send(embed = discord.Embed(
                 description=f'Репутация пользователя __**{ctx.author}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]}**__',
                 color = discord.Colour.random()
+            ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
             ))
         else:
             await ctx.send(embed = discord.Embed(
                 description=f'Репутация пользователя __**{member}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0]}**__',
                 color = discord.Colour.random()
+            ).set_footer(
+            text = f'{ctx.author} вызвал команду',
+            icon_url = ctx.author.avatar.url
             ))
     
     @commands.command()
