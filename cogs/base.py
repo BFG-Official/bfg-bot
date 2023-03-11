@@ -30,9 +30,16 @@ class Base(commands.Cog):
             for top_rep in cursor.execute("SELECT id, rep FROM users ORDER BY rep DESC LIMIT 10"):
                 k += 1
                 s = s + f'{k}) __**{commands.Bot.get_user(self.client, top_rep[0])}**__ | __**{top_rep[1]}**__ репутации(-ия)\n'
+            s = s + '...'
+            k = int(ctx.guild.member_count)
+            s2 = ''
+            for top_rep in cursor.execute("SELECT id, rep FROM users ORDER BY rep ASC LIMIT 10"):
+                s2 = f'\n{k}) __**{commands.Bot.get_user(self.client, top_rep[0])}**__ | __**{top_rep[1]}**__ репутации(-ия)' + s2
+                k -= 1
+            
             await ctx.send(embed = discord.Embed(
                 title = '**Топ репутаций**',
-                description = s,
+                description = s + s2,
                 color = discord.Colour.random()
             ))
     
