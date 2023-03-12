@@ -99,14 +99,14 @@ class Admin(commands.Cog):
 
     @commands.command()
     async def userinfo(self, ctx, member: Union[discord.Member, int] = None):
-        if ctx.author.id not in allowed_users:  # проверка доступа
+        if ctx.author.id not in allowed_users:
             return await ctx.send('У вас нет доступа!')
             
         if member is None:
             member = ctx.author
         elif isinstance(member, int):
             try:
-                member = await ctx.guild.fetch_member(member)  # получаем объект Member по ID
+                member = await ctx.guild.fetch_member(member)
             except discord.NotFound:
                 return await ctx.send('Пользователь с таким ID не найден!')
         elif not isinstance(member, discord.Member):
