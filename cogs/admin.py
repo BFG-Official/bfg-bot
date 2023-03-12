@@ -101,7 +101,7 @@ class Admin(commands.Cog):
     async def userinfo(self, ctx, member: Union[discord.Member, int] = None):
         if ctx.author.id not in allowed_users:  # проверка доступа
             return await ctx.send('У вас нет доступа!')
-        
+            
         if member is None:
             member = ctx.author
         elif isinstance(member, int):
@@ -111,21 +111,21 @@ class Admin(commands.Cog):
                 return await ctx.send('Пользователь с таким ID не найден!')
         elif not isinstance(member, discord.Member):
             return await ctx.send('Неверный тип аргумента!')
-            
+                
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
         embed.set_author(name=f"Информация о пользователе - {member}")
         embed.set_thumbnail(url=member.avatar.url)
         embed.add_field(name="ID:", value=member.id, inline=True)
         embed.add_field(name="Имя:", value=member.display_name, inline=True)
         embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
-        
+            
         if isinstance(member, int):
             return await ctx.send('Нужно отправить ID!')
-        
+            
         age = (ctx.message.created_at - member.created_at).days // 365
         embed.add_field(name="Возраст аккаунта пользователя:", value=f"{age} {'год' if age == 1 else 'года' if 1 < age < 5 else 'лет'}", inline=True)
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.send(embed=embed)
-
 
 async def setup(client):
     await client.add_cog(Admin(client))
