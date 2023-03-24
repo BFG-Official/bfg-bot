@@ -18,7 +18,8 @@ class Admin(commands.Cog):
     
     @commands.command()
     async def очистить(self ,ctx, count):
-        if not ctx.message.author.guild_permissions.administrator: return await ctx.send('У вас нет доступа к этой команде!')
+        if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in allowed_users:
+            return await ctx.send('У вас нет доступа к этой команде!')
         try: count = int(count)
         except: return await ctx.send('Надо писать число')
         if not (count > 0 and count <= 100): return await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
