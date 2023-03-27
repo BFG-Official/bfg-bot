@@ -39,11 +39,11 @@ class Admin(commands.Cog):
         rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
         if amount < 0:  
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
+                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.red()
             ))
             await ctx.reply(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`',
+                description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.red()
             ).set_footer(
             text = f'{ctx.author} вызвал команду',
@@ -52,11 +52,11 @@ class Admin(commands.Cog):
             return
         if amount > 0:
             await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
+                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.green()
             ))
             await ctx.reply(embed = discord.Embed(
-                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`',
+                description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.green()
             ).set_footer(
             text = f'{ctx.author} вызвал команду',
