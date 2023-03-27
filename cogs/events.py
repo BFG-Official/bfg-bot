@@ -46,17 +46,17 @@ class Events(commands.Cog):
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                        description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
+                        description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**\n\n**Содержание сообщения:** {message.content}',
                         color = discord.Colour.green()
-                    ).set_footer( text = f'Содержание сообщения: {message.content}' ))
+                    ))
                 elif payload.emoji.name == 'minusrep':
                     cursor.execute(f"UPDATE users SET rep = rep - 1 WHERE id = {message.author.id}")
                     connection.commit()
                     rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                     await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                        description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
+                        description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**\n\n**Содержание сообщения:** {message.content}',
                         color = discord.Colour.red()
-                    ).set_footer( text = f'Содержание сообщения: {message.content}' ))
+                    ))
                 cursor.execute(f"UPDATE users SET first_rep = 0 WHERE id = {user.id}")
                 old_users_ids = cursor.execute(f'SELECT old_rep_user_id FROM users WHERE id = {message.author.id}').fetchone()[0]
                 cursor.execute(f"UPDATE users SET old_rep_user_id = '{str(old_users_ids) + f'|{str(user.id)}|'}' WHERE id = {message.author.id}")
@@ -121,18 +121,18 @@ class Events(commands.Cog):
                 connection.commit()
                 rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                 await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                    description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
+                    description = f'Репутация участника __**{message.author}**__ понижена до __**{rep}**__ | `-1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**\n\n**Содержание сообщения:** {message.content}',
                     color = discord.Colour.red()
-                ).set_footer( text = f'Содержание сообщения: {message.content}' ))
+                ))
         elif payload.emoji.name == 'minusrep':
             if int(cursor.execute("SELECT is_bot_remove_react FROM users WHERE id = {}".format(user.id)).fetchone()[0]) == 0:
                 cursor.execute(f"UPDATE users SET rep = rep + 1 WHERE id = {message.author.id}")
                 connection.commit()
                 rep = cursor.execute(f"SELECT rep FROM users WHERE id = {message.author.id}").fetchone()[0]
                 await commands.Bot.get_channel(self.client, 1082613972617936926).send(embed = discord.Embed(
-                    description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**',
+                    description = f'Репутация участника __**{message.author}**__ повышена до __**{rep}**__ | `+1` | **[Сообщение](https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})**\n\n**Содержание сообщения:** {message.content}',
                     color = discord.Colour.green()
-                ).set_footer( text = f'Содержание сообщения: {message.content}' ))
+                ))
     
     @commands.Cog.listener()
     async def on_message(self, message):
