@@ -60,16 +60,15 @@ async def on_ready():
         timezone = pytz.timezone("Europe/Moscow")
         time_now = datetime.datetime.now(timezone)
 
-        time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
-
         # await bot.change_presence(activity=discord.Game(name="Включаюсь..."))
 
         # Уведомление о запуске бота в канал
 
-        embed = Embed(title=f"Запуск бота на {device_name} ({device_os}): {time_str}", color=discord.Colour.green())
+        embed = Embed(title=f"Запуск бота на {device_name} ({device_os})", color=discord.Colour.green())
         cog_list = "\n".join(cogs)
         embed.add_field(name="Загруженные модули:", value=cog_list, inline=False)
         embed.add_field(name="Статус:", value="Запуск завершен успешно!", inline=False)
+        embed.timestamp = datetime.datetime.utcnow()
         await bot.get_channel(1077307732757057656).send(embed=embed)
         
         await bot.change_presence(activity=discord.Game(name="Напишите >хелп чтобы открыть список команд"))
@@ -79,6 +78,7 @@ async def on_ready():
         # Если произошла ошибка, получаем ее информацию и отправляем в канал
         embed = Embed(title="Ошибка при запуске бота", color=discord.Colour.red())
         embed.add_field(name="Ошибка:", value=f"```{traceback.format_exc()}```", inline=False)
+        embed.timestamp = datetime.datetime.utcnow()
         await bot.get_channel(1077307732757057656).send(embed=embed)
         raise e
 
