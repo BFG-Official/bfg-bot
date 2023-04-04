@@ -1,4 +1,8 @@
 import discord
+import platform
+import socket
+import traceback
+from discord import Embed
 from discord.ext import commands
 import pytz, datetime, asyncio, sqlite3
 
@@ -12,53 +16,72 @@ cogs = ['admin','base','events','test']
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
 
+device_name = socket.gethostname()
+device_os = platform.system() + ' ' + platform.release()
+
 @bot.event
 async def on_ready():
-    # Проверка пользователей
-    cursor.execute("""CREATE TABLE IF NOT EXISTS users (
-        id INT,
-        rep BIGINT,
-        reps INT,
-        first_rep INT,
-        second_rep INT,
-        old_rep_user_id TEXT,
-        is_bot_remove_react INT,
-        lvl INT,
-        exp_lvl INT
-    )""")
+    try: 
+        # Проверка пользователей
+        cursor.execute("""CREATE TABLE IF NOT EXISTS users (
+            id INT,
+            rep BIGINT,
+            reps INT,
+            first_rep INT,
+            second_rep INT,
+            old_rep_user_id TEXT,
+            is_bot_remove_react INT,
+            lvl INT,
+            exp_lvl INT
+        )""")
 
-    for guild in bot.guilds:
-        for member in guild.members:
-            if member.bot: pass
-            if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
-                cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 3, 1, 1, '{'|0|'}', 0, 0, 0)")
-            else:
-                pass
-    connection.commit()
-    cursor.execute("UPDATE users SET reps = 3")
-    cursor.execute("UPDATE users SET first_rep = 1")
-    cursor.execute("UPDATE users SET second_rep = 1")
-    cursor.execute(f"UPDATE users SET old_rep_user_id = '{'|0|'}'")
-    cursor.execute("UPDATE users SET is_bot_remove_react = 0")
-    connection.commit()
+        for guild in bot.guilds:
+            for member in guild.members:
+                if member.bot: pass
+                if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
+                    cursor.execute(f"INSERT INTO users VALUES({member.id}, 0, 3, 1, 1, '{'|0|'}', 0, 0, 0)")
+                else:
+                    pass
+        connection.commit()
+        cursor.execute("UPDATE users SET reps = 3")
+        cursor.execute("UPDATE users SET first_rep = 1")
+        cursor.execute("UPDATE users SET second_rep = 1")
+        cursor.execute(f"UPDATE users SET old_rep_user_id = '{'|0|'}'")
+        cursor.execute("UPDATE users SET is_bot_remove_react = 0")
+        connection.commit()
 
-    print('База данных подключена')
+        print('База данных подключена')
 
-    # Загрузка команд
-    for extension in cogs:
-        await bot.load_extension(f'cogs.{extension}')
-        print('Модуль',extension, 'подключён')
-        await bot.get_channel(1077307732757057656).send(f'Модуль {extension} подключён')
-    # Запуск бота
-    timezone = pytz.timezone("Europe/Moscow")
-    time_now = datetime.datetime.now(timezone)
+        # Загрузка команд
+        for extension in cogs:
+            await bot.load_extension(f'cogs.{extension}')
+            print('Модуль',extension, 'подключён')
+        # Запуск бота
+        timezone = pytz.timezone("Europe/Moscow")
+        time_now = datetime.datetime.now(timezone)
 
-    time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
+        time_str = time_now.strftime("%d.%m.%Y %H:%M:%S")
 
-    # await bot.change_presence(activity=discord.Game(name="Включаюсь..."))
-    await bot.change_presence(activity=discord.Game(name="Напишите >хелп чтобы открыть список команд"))
-    await bot.get_channel(1077307732757057656).send(f"Запуск завершен успешно! Время в которое включился бот [МСК]: `{time_str}`")
-    print('BFG-bot готов к работе!')
+        # await bot.change_presence(activity=discord.Game(name="Включаюсь..."))
+
+        # Уведомление о запуске бота в канал
+
+        embed = Embed(title=f"Запуск бота на {device_name} ({device_os}): {time_str}", color=discord.Colour.green())
+        cog_list = "\n".join(cogs)
+        embed.add_field(name="Загруженные модули:", value=cog_list, inline=False)
+        embed.add_field(name="Статус:", value="Запуск завершен успешно!", inline=False)
+        await bot.get_channel(1077307732757057656).send(embed=embed)
+        
+        await bot.change_presence(activity=discord.Game(name="Напишите >хелп чтобы открыть список команд"))
+        print('BFG-bot готов к работе!')
+
+    except Exception as e:
+        # Если произошла ошибка, получаем ее информацию и отправляем в канал
+        embed = Embed(title="Ошибка при запуске бота", color=discord.Colour.red())
+        embed.add_field(name="Ошибка:", value=f"```{traceback.format_exc()}```", inline=False)
+        await bot.get_channel(1077307732757057656).send(embed=embed)
+        raise e
+
     # start_time = datetime.datetime.now()
 
     while True:
