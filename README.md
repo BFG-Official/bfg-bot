@@ -11,8 +11,8 @@ class Название(commands.Cog):
     
     (Здесь команды)
 
-def setup(client):
-    client.add_cog(Название как в class(client))
+async def setup(client):
+    await client.add_cog(Название(client))
 ============================================================================
 "@bot.command" мнеяется на "@commands.command()"
 "@bot.event" мнеяется на "@commands.Cog.listener()"
