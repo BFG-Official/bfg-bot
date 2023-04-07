@@ -8,7 +8,7 @@ class pixelbattle(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if payload.message_id == 1093252050105667624 and payload.emoji.name == '⚒️':
+        if payload.message_id == 1093810191155343360 and payload.emoji.name == '⚒️':
             message = await self.client.get_channel(payload.channel_id).fetch_message(payload.message_id)
             member = message.guild.get_member(payload.user_id)
             role = message.guild.get_role(1093252309712109568)
@@ -16,7 +16,7 @@ class pixelbattle(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        if payload.message_id == 1093252050105667624 and payload.emoji.name == '⚒️':
+        if payload.message_id == 1093810191155343360 and payload.emoji.name == '⚒️':
             guild = await self.client.fetch_guild(payload.guild_id)
             member = await guild.fetch_member(payload.user_id)
             role = guild.get_role(1093252309712109568)
