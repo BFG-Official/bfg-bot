@@ -5,7 +5,7 @@ import datetime, sqlite3
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
 
-class Events(commands.Cog):
+class error_logger(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -35,4 +35,4 @@ class Events(commands.Cog):
             await error_channel.send(embed=embed)
 
 async def setup(client):
-    await client.add_cog(Events(client))
+    await client.add_cog(error_logger(client))
