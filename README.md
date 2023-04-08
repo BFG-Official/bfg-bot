@@ -1,6 +1,8 @@
-При создании новой группы команд:
-Создаём файл название.py В ПАПКУ "cogs" и используем шаблон:
-============================================================================
+# При создании новой группы команд:
+## Создаём файл название.py В ПАПКУ "cogs" и используем шаблон:
+
+
+```
 import discord
 from discord.ext import commands
 
@@ -9,13 +11,14 @@ class Название(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    (Здесь команды)
+    (Здесь код)
 
 async def setup(client):
     await client.add_cog(Название(client))
-============================================================================
-"@bot.command" мнеяется на "@commands.command()"
-"@bot.event" мнеяется на "@commands.Cog.listener()"
+```
+
+"@bot.command" меняется на "@commands.command()"
+"@bot.event" меняется на "@commands.Cog.listener()"
 
 Некоторые функции например ".get_channel(id)" могут не работать
 Для исправления можно попробовать дописать ".get_channel(self.client, id)"
