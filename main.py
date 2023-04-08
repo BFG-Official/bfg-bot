@@ -11,7 +11,7 @@ bot.remove_command('help')
 
 allowed_users = [695684705328169060, 617415875947003915]
 
-cogs = ['admin','base','events','test','reputation']
+cogs = ['admin','base','events','test','reputation','members_control']
 
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
