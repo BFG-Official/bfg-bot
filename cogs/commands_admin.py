@@ -11,7 +11,7 @@ allowed_roles = [964807055980523520]
 moderator_roles = [1030023894968565821, 964807055980523520, 854993494107750402, 960495606596517931, 873268262555750471, 975329806520553503, 1050457595963523203]
 mapchecker_role = [1068946458201575605]
 
-class Admin(commands.Cog):
+class commands_admin(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -101,4 +101,4 @@ class Admin(commands.Cog):
         ))
 
 async def setup(client):
-    await client.add_cog(Admin(client))
+    await client.add_cog(commands_admin(client))

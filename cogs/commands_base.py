@@ -6,7 +6,7 @@ import pytz, datetime, asyncio, sqlite3
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
 
-class Base(commands.Cog):
+class commands_base(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -129,4 +129,4 @@ class Base(commands.Cog):
         await ctx.send(embed=embed)
 
 async def setup(client):
-    await client.add_cog(Base(client))
+    await client.add_cog(commands_base(client))
