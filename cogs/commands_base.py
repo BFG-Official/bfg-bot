@@ -128,5 +128,40 @@ class commands_base(commands.Cog):
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def серверинфо(self, ctx):
+        # Участники
+        all_members = len(ctx.guild.members)
+        humans = len(list(filter(lambda m: not m.bot, ctx.guild.members)))
+        bots = len(list(filter(lambda m: m.bot, ctx.guild.members)))
+
+        # Статусы участников
+        online = len(list(filter(lambda m: m.status == discord.Status.online, ctx.guild.members)))
+        idle = len(list(filter(lambda m: m.status == discord.Status.idle, ctx.guild.members)))
+        dnd = len(list(filter(lambda m: m.status == discord.Status.dnd, ctx.guild.members)))
+        offline = len(list(filter(lambda m: m.status == discord.Status.offline, ctx.guild.members)))
+
+        # Каналы
+        all_channels = len(ctx.guild.channels)
+        text_channels = len(ctx.guild.text_channels)
+        announcement_channels = len(list(filter(lambda c: isinstance(c, discord.TextChannel) and c.is_news(), ctx.guild.channels)))
+        voice_channels = len(ctx.guild.voice_channels)
+
+        # Дата создания сервера
+        created_at = ctx.guild.created_at.strftime('%d.%m.%Y %H:%M:%S')
+
+        # Владелец сервера
+        owner = ctx.guild.owner
+
+        # Создание и отправка эмбеда
+        embed = discord.Embed(title=f'Информация о сервере {ctx.guild.name}', color=discord.Color.blue())
+        embed.add_field(name='Участники', value=f'Всего: {all_members}\nЛюдей: {humans}\nБотов: {bots}', inline=True)
+        embed.add_field(name='По статусам', value=f'В сети: {online}\nНе активен: {idle}\nНе беспокоить: {dnd}\nНе в сети: {offline}', inline=True)
+        embed.add_field(name='Каналы', value=f'Всего: {all_channels}\nТекстовых: {text_channels}\nОбъявления: {announcement_channels}\nГолосовых: {voice_channels}', inline=True)
+        embed.add_field(name='Владелец', value=owner.mention, inline=True)
+        embed.add_field(name='Дата создания', value=created_at, inline=True)
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
+        await ctx.send(embed=embed)
+
 async def setup(client):
     await client.add_cog(commands_base(client))
