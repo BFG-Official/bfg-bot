@@ -1,11 +1,8 @@
 import discord
 from discord.ext import commands
-import datetime, sqlite3
+import datetime
 
-connection = sqlite3.connect('server.db')
-cursor = connection.cursor()
-
-class error_logger(commands.Cog):
+class ErrorLogger(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -32,7 +29,8 @@ class error_logger(commands.Cog):
             embed.add_field(name='Канал:', value=f'{ctx.channel.name} ({ctx.channel.id})')
             embed.timestamp = datetime.datetime.utcnow()
             error_channel = self.client.get_channel(1077307732757057656)
-            await error_channel.send(embed=embed)
+            if error_channel:
+                await error_channel.send(embed=embed)
 
-async def setup(client):
-    await client.add_cog(error_logger(client))
+def setup(client):
+    client.add_cog(ErrorLogger(client))
