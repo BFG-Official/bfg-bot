@@ -13,14 +13,21 @@ class commands_base(commands.Cog):
     
     @commands.command()
     async def хелп(self, ctx):
-        await ctx.send(embed = discord.Embed(
-            title = '**Список команд**',
-            description = '**Основные команды**\n\n`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - Бот напомнит в определённую дату,\n`>репутация` - Бот покажет вашу репутпцию,\n`>топ (название)` - Бот покажет таблицу лидеров,\n`>серверинфо` - Выводит информацию о сервере.\n\n**Разное**\n\n`>привет` - Приветствие бота,\n`>инфо (ID или оставить пустым)` - Информация о пользователе.',
-            color = discord.Colour.random()
-        ).set_footer(
-            text = f'{ctx.author} вызвал команду',
-            icon_url = ctx.author.avatar.url
-        ))
+        embed = discord.Embed(
+            title='**Список команд**',
+            description='**Основные команды**\n\n'
+                        '`>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)` - '
+                        'Бот напомнит в определённую дату,\n'
+                        '`>репутация` - Бот покажет вашу репутпцию,\n'
+                        '`>топ (название)` - Бот покажет таблицу лидеров,\n'
+                        '`>серверинфо` - Выводит информацию о сервере.\n\n'
+                        '**Разное**\n\n'
+                        '`>привет` - Приветствие бота,\n'
+                        '`>инфо (ID или оставить пустым)` - Информация о пользователе.',
+            color=discord.Colour.random()
+        )
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def топ(self, ctx, name :str = None):
