@@ -19,7 +19,7 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
       with:
         source: "."
-        target: "/root/bfg-bot/"
+        target: "/SERVERS_FOLDER/bfg-bot/"
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -28,4 +28,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: reboot
+        script: supervisorctl restart bfg-bot
