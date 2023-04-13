@@ -18,6 +18,11 @@ class Test(commands.Cog):
             description = f'[Сообщение](https://discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id})'
         ))
 
+    @commands.command()
+    async def тест2(self, ctx):
+        await ctx.send(embed = discord.Embed(
+            description = 'Секретный тест'
+        ))
 
 async def setup(client):
     await client.add_cog(Test(client))
