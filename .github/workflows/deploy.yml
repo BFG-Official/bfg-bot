@@ -1,18 +1,31 @@
-name: scp files
-on: [push]
-jobs:
+name: Deploy
 
+on: [push]
+
+jobs:
   build:
-    name: Build
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v0.1.4
-    - name: copy file via ssh password
+    - uses: actions/checkout@v1
+
+    - name: Copy repository contents via scp
       uses: appleboy/scp-action@v0.1.4
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
       with:
-        host: "80.90.187.31"
-        username: root
-        password: cDTSs4nc
-        port: 22
         source: "."
         target: "/servers_folder/bfg-bot/"
+
+    - name: Executing remote command
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
+        script: ls
