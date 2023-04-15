@@ -21,7 +21,7 @@ class Test(commands.Cog):
     @commands.command()
     async def тест2(self, ctx):
         await ctx.send(embed = discord.Embed(
-            description = 'Секретный тест'
+            description = 'Секретный тест (Очень)'
         ))
 
 async def setup(client):
