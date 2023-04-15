@@ -26,7 +26,7 @@ class anti_pon(commands.Cog):
         for i in pon_words:
             if (' ' + i + ' ' in mess):
                 await message.reply('пидораст ты', mention_author=True)
-                break
+                break #БЕБРОЧКА
     
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
