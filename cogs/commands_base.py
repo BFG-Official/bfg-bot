@@ -182,5 +182,16 @@ class commands_base(commands.Cog):
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.reply(embed=embed)
 
+    @commands.command()
+    @commands.guild_only()
+    async def пёс(self, ctx):
+        response = requests.get('https://api.thedogapi.com/v1/images/search')
+        data = response.json()
+        image_url = data[0]['url']
+        embed = discord.Embed(title='Ваш пёсик на подходе!', color=0xff9900)
+        embed.set_image(url=image_url)
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
+        await ctx.reply(embed=embed)
+
 async def setup(client):
     await client.add_cog(commands_base(client))
