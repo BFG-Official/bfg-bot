@@ -30,6 +30,14 @@ class commands_admin(commands.Cog):
             await ctx.channel.purge(limit=count+1)
         except:
             await ctx.send('Кажется я не могу удалять сообщения')
+
+    @commands.command()
+    async def повтори(self, ctx, *, text):
+        if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in self.allowed_users:
+            return await ctx.send('У вас нет доступа к этой команде!')
+
+        await ctx.send(text)
+        await ctx.message.delete()
     
     @commands.command()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
