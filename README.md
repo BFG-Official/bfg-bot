@@ -22,6 +22,8 @@ async def setup(client):
 "@bot.command" меняется на "@commands.command()"
 "@bot.event" меняется на "@commands.Cog.listener()"
 
+Обязательно при создании команды добавлять "@commands.guild_only()" после "@commands.command()"
+
 Некоторые функции например ".get_channel(id)" могут не работать,
 для исправления можно попробовать дописать ".get_channel(self.client, id)"
 
