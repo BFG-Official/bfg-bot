@@ -1,8 +1,8 @@
 # При создании новой группы команд:
-## Создаём файл название.py В ПАПКУ "cogs" и используем шаблон:
 
+Создайте файл с названием.py в папке "cogs" и используйте шаблон:
 
-```
+```py
 import discord
 from discord.ext import commands
 
@@ -11,31 +11,24 @@ class Название(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    (Здесь код)
+# Здесь код
 
 async def setup(client):
     await client.add_cog(Название(client))
 ```
 
-При создании команды используем вместо ctx.send - ctx.message.reply (Используем только в случаях если необходимо ответить пользователю, например сообщение о том что пользователь не написал какой либо аргумент, или о успешном выполнении команды)
+- При создании команды используйте `ctx.message.reply` вместо `ctx.send` (Используйте только в случаях, когда нужно ответить пользователю, например, сообщение о том, что пользователь не указал какой-либо аргумент, или об успешном выполнении команды).
+- Замените `@bot.command` на `@commands.command()` и `@bot.event` на `@commands.Cog.listener()`.
+- Обязательно добавьте `@commands.guild_only()` после `@commands.command()` при создании команды.
+- Некоторые функции, например `.get_channel(id)`, могут не работать. Чтобы исправить это, вы можете дописать `.get_channel(self.client, id)`.
+- Замените `bot.` (bot.get_channel(id)) на `command.Bot`.
+- Если вы создаете новую команду, то обязательно добавьте `self`:
 
-"@bot.command" меняется на "@commands.command()"
-"@bot.event" меняется на "@commands.Cog.listener()"
+**Неправильно:** "async def название_команды(ctx)"
 
-Обязательно при создании команды добавлять "@commands.guild_only()" после "@commands.command()"
+**Правильно:** "async def название_команды(self, ctx)"
 
-Некоторые функции например ".get_channel(id)" могут не работать,
-для исправления можно попробовать дописать ".get_channel(self.client, id)"
-
-Приписка "bot." (bot.get_channel(id)) меняется на "command.Bot"
-
-Если создавать новую команду то надо обязательно добавлять 'self':
-
-Как неправильно: "async def название_команды(ctx)",
-Как правильно: "async def название_команды(self, ctx)"
-
-# При создании эмбеда добавлять в конец следующее:
-`.set_footer(
-            text = f'{ctx.author} вызвал команду',
-            icon_url = ctx.author.avatar.url
-        )`
+- При создании эмбеда добавьте следующее в конце:
+```py
+.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
+```
