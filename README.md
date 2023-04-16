@@ -17,6 +17,8 @@ async def setup(client):
     await client.add_cog(Название(client))
 ```
 
+При создании команды используем вместо ctx.send - ctx.message.reply (Используем только в случаях если необходимо ответить пользователю, например сообщение о том что пользователь не написал какой либо аргумент, или о успешном выполнении команды)
+
 "@bot.command" меняется на "@commands.command()"
 "@bot.event" меняется на "@commands.Cog.listener()"
 
