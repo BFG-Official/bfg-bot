@@ -27,12 +27,12 @@ class commands_base(commands.Cog):
             color=discord.Colour.random()
         )
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
     @commands.command()
     async def топ(self, ctx, name :str = None):
-        if name is None: await ctx.send('Укажите название таблицы топов (репутации)')
-        if not (name in ['репутации']): await ctx.send('Такого названия таблицы лидеров не существует')
+        if name is None: await ctx.message.reply('Укажите название таблицы топов (репутации)')
+        if not (name in ['репутации']): await ctx.message.reply('Такого названия таблицы лидеров не существует')
         if name == 'репутации':
             k = 0
             s = ''
@@ -46,7 +46,7 @@ class commands_base(commands.Cog):
                 s2 = f'\n{k}) __**{commands.Bot.get_user(self.client, top_rep[0])}**__ | __**{top_rep[1]}**__ репутации(-ия)' + s2
                 k -= 1
             
-            await ctx.send(embed = discord.Embed(
+            await ctx.message.reply(embed = discord.Embed(
                 title = '**Топ репутаций**',
                 description = s + s2,
                 color = discord.Colour.random()
@@ -76,7 +76,7 @@ class commands_base(commands.Cog):
     
     @commands.command()
     async def привет(self, ctx):
-        await ctx.send(f'Приветик, {ctx.message.author.mention}!')
+        await ctx.message.reply(f'Приветик, {ctx.message.author.mention}!')
 
     @commands.command()
     async def напомни(self, ctx, ttime, *, text = 'None'):
@@ -101,9 +101,9 @@ class commands_base(commands.Cog):
                     await message.edit(content = edit)
                     await ctx.reply(ctx.message.author.mention + ', ' + text)
             else:
-                await ctx.send('Пишите **будущую московскую** дату')
+                await ctx.message.reply('Пишите **будущую московскую** дату')
         except:
-            await ctx.send('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
+            await ctx.message.reply('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
 
     @commands.command()
     async def инфо(self, ctx, member: Union[discord.Member, int, str] = None):
@@ -111,14 +111,14 @@ class commands_base(commands.Cog):
         if member is None:
             member = ctx.author
         elif isinstance(member, str):
-            return await ctx.send('Аргумент должен быть числом!')
+            return await ctx.message.reply('Аргумент должен быть числом!')
         elif isinstance(member, int):
             try:
                 member = await ctx.guild.fetch_member(member)
             except discord.NotFound:
-                return await ctx.send('Пользователь с таким ID не найден!')
+                return await ctx.message.reply('Пользователь с таким ID не найден!')
         elif not isinstance(member, discord.Member):
-            return await ctx.send('Неверный тип аргумента!')
+            return await ctx.message.reply('Неверный тип аргумента!')
         
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
         embed.set_author(name=f"Информация о пользователе - {member}")
@@ -162,7 +162,7 @@ class commands_base(commands.Cog):
         embed.add_field(name='Владелец', value=owner.mention, inline=True)
         embed.add_field(name='Дата создания', value=created_at, inline=True)
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
 async def setup(client):
     await client.add_cog(commands_base(client))

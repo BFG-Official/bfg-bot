@@ -15,15 +15,15 @@ class error_logger(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Вы не указали все аргументы. Для помощи используйте команду **>хелп**.')
+            await ctx.message.reply('Вы не указали все аргументы. Для помощи используйте команду **>хелп**.')
         elif isinstance(error, commands.MemberNotFound):
-            await ctx.send('Пользователь не найден.')
+            await ctx.message.reply('Пользователь не найден.')
         elif isinstance(error, commands.BadArgument):
-            await ctx.send('Неправильный аргумент. Для помощи используйте команду **>хелп**.')
+            await ctx.message.reply('Неправильный аргумент. Для помощи используйте команду **>хелп**.')
         elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.send('Эта команда не может быть выполнена в личных сообщениях.')
+            await ctx.message.reply('Эта команда не может быть выполнена в личных сообщениях.')
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(f'Эта команда недоступна. Пожалуйста, подождите {error.retry_after:.2f} секунд и попробуйте снова.')
+            await ctx.message.reply(f'Эта команда недоступна. Пожалуйста, подождите {error.retry_after:.2f} секунд и попробуйте снова.')
         else:
             embed = discord.Embed(title='Ошибка выполнения команды', color=discord.Color.red())
             embed.add_field(name='Сообщение об ошибке:', value=f'```{error}```')

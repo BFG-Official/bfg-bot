@@ -12,17 +12,17 @@ class emoji_otbor(commands.Cog):
     @commands.command()
     async def добавить_реакции(self, ctx, channel_id: int):
         if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in self.allowed_users:
-            return await ctx.send('У вас нет доступа к этой команде!')
+            return await ctx.message.reply('У вас нет доступа к этой команде!')
 
         channel = self.client.get_channel(channel_id)
         if not channel:
-            return await ctx.send("Неверный ID канала.")
+            return await ctx.message.reply("Неверный ID канала.")
 
         async for message in channel.history(limit=None):
             await message.add_reaction('✅')
             await message.add_reaction('❌')
 
-        await ctx.send("Реакции добавлены на все сообщения в указанном канале.")
+        await ctx.message.reply("Реакции добавлены на все сообщения в указанном канале.")
 
 async def setup(client):
     await client.add_cog(emoji_otbor(client))

@@ -19,32 +19,32 @@ class commands_admin(commands.Cog):
     @commands.command()
     async def очистить(self ,ctx, count):
         if ctx.channel.id != 1075332621095153764:
-            return await ctx.send('Данная команда отключена в этом канале.')
+            return await ctx.message.reply('Данная команда отключена в этом канале.')
 
         if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in allowed_users:
-            return await ctx.send('У вас нет доступа к этой команде!')
+            return await ctx.message.reply('У вас нет доступа к этой команде!')
         try: count = int(count)
-        except: return await ctx.send('Надо писать число')
-        if not (count > 0 and count <= 100): return await ctx.send('Количество сообщений разрешено не менее 1 и не более 100.')
+        except: return await ctx.message.reply('Надо писать число')
+        if not (count > 0 and count <= 100): return await ctx.message.reply('Количество сообщений разрешено не менее 1 и не более 100.')
         try:
             await ctx.channel.purge(limit=count+1)
         except:
-            await ctx.send('Кажется я не могу удалять сообщения')
+            await ctx.message.reply('Кажется я не могу удалять сообщения')
 
     @commands.command()
     async def повтори(self, ctx, *, text):
         if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in self.allowed_users:
-            return await ctx.send('У вас нет доступа к этой команде!')
+            return await ctx.message.reply('У вас нет доступа к этой команде!')
 
         await ctx.send(text)
         await ctx.message.delete()
     
     @commands.command()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
-        if member is None: return await ctx.send('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
-        if member.bot: return await ctx.send('У ботов нет рейтинга')
-        if amount is None: return await ctx.send('Укажите на сколько изменить репутацию')
+        if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
+        if member is None: return await ctx.message.reply('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
+        if member.bot: return await ctx.message.reply('У ботов нет рейтинга')
+        if amount is None: return await ctx.message.reply('Укажите на сколько изменить репутацию')
         cursor.execute("UPDATE users SET rep = rep + {} WHERE id = {}".format(amount, member.id))
         connection.commit()
         rep = int(cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0])
@@ -77,12 +77,12 @@ class commands_admin(commands.Cog):
     
     @commands.command()
     async def cleardb(self, ctx, namedb: str = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
-        if namedb is None: return await ctx.send('Вы не указали тип переменной `>cleardb (тип)`')
-        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.send('Существуют только `rep, lvl, bankcash, cash`')
+        if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
+        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>cleardb (тип)`')
+        if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.message.reply('Существуют только `rep, lvl, bankcash, cash`')
         cursor.execute("UPDATE users SET {} = 0".format(namedb))
         connection.commit()
-        await ctx.send(embed = discord.Embed(
+        await ctx.message.reply(embed = discord.Embed(
             description=f'Переменная __**{namedb}**__ обнулена у всех участников по причине __**{reason}**__',
             color = discord.Colour.random()
         ).set_footer(
@@ -92,12 +92,12 @@ class commands_admin(commands.Cog):
     
     @commands.command()
     async def changedb(self, ctx, namedb: str = None, member: discord.Member = None, changed = None, *, reason: str = 'Без причины'):
-        if not (ctx.author.id in allowed_users): return await ctx.send('У вас нет доступа!')
-        if namedb is None: return await ctx.send('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
+        if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
+        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
         if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.send('Существуют только типы `rep, lvl, bankcash, cash`')
         if namedb in ['rep', 'lvl', 'bankcash', 'cash']:
             try: changed = int(changed)
-            except: return await ctx.send('Для этих переменных значение должно быть число')
+            except: return await ctx.message.reply('Для этих переменных значение должно быть число')
         cursor.execute("UPDATE users SET {} = '{}' WHERE id = {}".format(namedb, changed, member.id))
         connection.commit()
         await ctx.send(embed = discord.Embed(
