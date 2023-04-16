@@ -28,7 +28,7 @@ async def setup(client):
 
 **Правильно:** "async def название_команды(self, ctx)"
 
-- При создании эмбеда добавьте следующее в конце:
+- При создании команды с эмбедом добавьте следующее в конце:
 ```py
 .set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
 ```
