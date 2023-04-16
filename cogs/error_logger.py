@@ -25,6 +25,8 @@ class error_logger(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.message.reply(f'Эта команда недоступна. Пожалуйста, подождите {error.retry_after:.2f} секунд и попробуйте снова.')
         else:
+            await ctx.message.reply('Бот выдал ошибку, информация была отправлена разработчикам. 😔')
+
             embed = discord.Embed(title='Ошибка выполнения команды', color=discord.Color.red())
             embed.add_field(name='Сообщение об ошибке:', value=f'```{error}```')
             embed.add_field(name='Команда:', value=f'```{ctx.message.content}```')
