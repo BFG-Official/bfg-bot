@@ -17,6 +17,7 @@ class commands_admin(commands.Cog):
         self.client = client
     
     @commands.command()
+    @commands.guild_only()
     async def очистить(self ,ctx, count):
         if ctx.channel.id != 1075332621095153764:
             return await ctx.message.reply('Данная команда отключена в этом канале.')
@@ -32,6 +33,7 @@ class commands_admin(commands.Cog):
             await ctx.message.reply('Кажется я не могу удалять сообщения')
 
     @commands.command()
+    @commands.guild_only()
     async def повтори(self, ctx, *, text):
         if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in self.allowed_users:
             return await ctx.message.reply('У вас нет доступа к этой команде!')
@@ -40,6 +42,7 @@ class commands_admin(commands.Cog):
         await ctx.message.delete()
     
     @commands.command()
+    @commands.guild_only()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
         if member is None: return await ctx.message.reply('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
@@ -76,6 +79,7 @@ class commands_admin(commands.Cog):
             return
     
     @commands.command()
+    @commands.guild_only()
     async def cleardb(self, ctx, namedb: str = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
         if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>cleardb (тип)`')
@@ -91,6 +95,7 @@ class commands_admin(commands.Cog):
         ))
     
     @commands.command()
+    @commands.guild_only()
     async def changedb(self, ctx, namedb: str = None, member: discord.Member = None, changed = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
         if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')

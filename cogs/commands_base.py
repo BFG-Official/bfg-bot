@@ -12,6 +12,7 @@ class commands_base(commands.Cog):
         self.client = client
     
     @commands.command()
+    @commands.guild_only()
     async def хелп(self, ctx):
         embed = discord.Embed(
             title='**Список команд**',
@@ -30,6 +31,7 @@ class commands_base(commands.Cog):
         await ctx.message.reply(embed=embed)
 
     @commands.command()
+    @commands.guild_only()
     async def топ(self, ctx, name :str = None):
         if name is None: await ctx.message.reply('Укажите название таблицы топов (репутации)')
         if not (name in ['репутации']): await ctx.message.reply('Такого названия таблицы лидеров не существует')
@@ -56,6 +58,7 @@ class commands_base(commands.Cog):
             ))
     
     @commands.command()
+    @commands.guild_only()
     async def репутация(self, ctx, member: discord.Member = None):
         if member is None:
             await ctx.message.reply(embed = discord.Embed(
@@ -75,10 +78,12 @@ class commands_base(commands.Cog):
             ))
     
     @commands.command()
+    @commands.guild_only()
     async def привет(self, ctx):
         await ctx.message.reply(f'Приветик, {ctx.message.author.mention}!')
 
     @commands.command()
+    @commands.guild_only()
     async def напомни(self, ctx, ttime, *, text = 'None'):
         try:
             n = ttime + '+0300'
@@ -106,6 +111,7 @@ class commands_base(commands.Cog):
             await ctx.message.reply('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
 
     @commands.command()
+    @commands.guild_only()
     async def инфо(self, ctx, member: Union[discord.Member, int, str] = None):
         
         if member is None:
@@ -136,6 +142,7 @@ class commands_base(commands.Cog):
         await ctx.message.reply(embed=embed)
 
     @commands.command()
+    @commands.guild_only()
     async def серверинфо(self, ctx):
         all_members = len(ctx.guild.members)
         humans = len(list(filter(lambda m: not m.bot, ctx.guild.members)))

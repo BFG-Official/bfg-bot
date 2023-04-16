@@ -10,6 +10,7 @@ class emoji_otbor(commands.Cog):
         self.client = client
 
     @commands.command()
+    @commands.guild_only()
     async def добавить_реакции(self, ctx, channel_id: int):
         if not ctx.message.author.guild_permissions.administrator and ctx.message.author.id not in self.allowed_users:
             return await ctx.message.reply('У вас нет доступа к этой команде!')

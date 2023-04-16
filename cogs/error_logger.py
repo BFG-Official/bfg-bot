@@ -21,7 +21,7 @@ class error_logger(commands.Cog):
         elif isinstance(error, commands.BadArgument):
             await ctx.message.reply('Неправильный аргумент. Для помощи используйте команду **>хелп**.')
         elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.message.reply('Эта команда не может быть выполнена в личных сообщениях.')
+            await ctx.message.reply('Команды в личных сообщениях запрещены.')
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.message.reply(f'Эта команда недоступна. Пожалуйста, подождите {error.retry_after:.2f} секунд и попробуйте снова.')
         else:
