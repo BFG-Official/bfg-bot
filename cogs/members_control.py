@@ -85,7 +85,7 @@ class members_control(commands.Cog):
 
             welcome_embed = discord.Embed(
                 title = 'Добро пожаловать на сервер!',
-                description='Добро пожаловать на сервер **BFG Game Developer**!\n\nВсю нужную вам информацию можно прочитать в канале <#864854156842106910>, так же если имеются вопросы то вы можете спросить их в канале <#1047097724710944809>а.\n\n(Так же подписывайтесь на наш Telegram канал: https://t.me/teleportal_news)',
+                description='Добро пожаловать на сервер **BFG Team**!\n\nВсю нужную вам информацию можно прочитать в канале <#864854156842106910>, так же если имеются вопросы то вы можете спросить их в канале <#1047097724710944809>а.\n\n(Так же подписывайтесь на наш Telegram канал: https://t.me/teleportal_news)',
                 color = discord.Colour.green()
             )
             welcome_embed.set_footer(text='Желаем удачи')
