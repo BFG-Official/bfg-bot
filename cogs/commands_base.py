@@ -58,7 +58,7 @@ class commands_base(commands.Cog):
     @commands.command()
     async def репутация(self, ctx, member: discord.Member = None):
         if member is None:
-            await ctx.send(embed = discord.Embed(
+            await ctx.message.reply(embed = discord.Embed(
                 description=f'Репутация пользователя __**{ctx.author}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]}**__',
                 color = discord.Colour.random()
             ).set_footer(
@@ -133,7 +133,7 @@ class commands_base(commands.Cog):
             age = (ctx.message.created_at - member.created_at).days // 365
         embed.add_field(name="Возраст аккаунта:", value=f"{age} {'год' if age == 1 else 'года' if 1 < age < 5 else 'лет'}", inline=True)
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
     @commands.command()
     async def серверинфо(self, ctx):

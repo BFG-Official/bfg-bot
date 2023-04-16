@@ -53,7 +53,7 @@ class commands_admin(commands.Cog):
                 description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.red()
             ))
-            await ctx.reply(embed = discord.Embed(
+            await ctx.message.reply(embed = discord.Embed(
                 description=f'Репутация __**{member}**__ понижена до __**{rep}**__ | `{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.red()
             ).set_footer(
@@ -66,7 +66,7 @@ class commands_admin(commands.Cog):
                 description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.green()
             ))
-            await ctx.reply(embed = discord.Embed(
+            await ctx.message.reply(embed = discord.Embed(
                 description=f'Репутация __**{member}**__ повышена до __**{rep}**__ | `+{amount}`\n\nРепутация была изменена администрацией сервера',
                 color = discord.Colour.green()
             ).set_footer(
@@ -100,7 +100,7 @@ class commands_admin(commands.Cog):
             except: return await ctx.message.reply('Для этих переменных значение должно быть число')
         cursor.execute("UPDATE users SET {} = '{}' WHERE id = {}".format(namedb, changed, member.id))
         connection.commit()
-        await ctx.send(embed = discord.Embed(
+        await ctx.message.reply(embed = discord.Embed(
             description=f'Переменная __**{namedb}**__ у участника __**{member}**__ изменена на __**{changed}**__ по причине __**{reason}**__',
             color = discord.Colour.random()
         ).set_footer(
