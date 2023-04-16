@@ -1,7 +1,7 @@
 import discord
 from typing import Union
 from discord.ext import commands
-import pytz, datetime, asyncio, sqlite3
+import pytz, datetime, asyncio, sqlite3, requests
 
 connection = sqlite3.connect('server.db')
 cursor = connection.cursor()
@@ -170,6 +170,17 @@ class commands_base(commands.Cog):
         embed.add_field(name='Дата создания', value=created_at, inline=True)
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.message.reply(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def кот(self, ctx):
+        response = requests.get('https://api.thecatapi.com/v1/images/search')
+        data = response.json()
+        image_url = data[0]['url']
+        embed = discord.Embed(title='Ваш котик на подходе!', color=0xff9900)
+        embed.set_image(url=image_url)
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
+        await ctx.reply(embed=embed)
 
 async def setup(client):
     await client.add_cog(commands_base(client))
