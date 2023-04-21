@@ -184,9 +184,9 @@ class commands_base(commands.Cog):
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.reply(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['пес'])
     @commands.guild_only()
-    async def пёс(self, ctx):
+    async def пёс (self, ctx):
         response = requests.get('https://api.thedogapi.com/v1/images/search')
         data = response.json()
         image_url = data[0]['url']
