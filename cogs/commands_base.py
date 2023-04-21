@@ -143,7 +143,7 @@ class commands_base(commands.Cog):
         embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.message.reply(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['сервер'])
     @commands.guild_only()
     async def серверинфо(self, ctx):
         all_members = len(ctx.guild.members)
