@@ -11,7 +11,7 @@ class commands_base(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @commands.command()
+    @commands.command(aliases=['помощь'])
     @commands.guild_only()
     async def хелп(self, ctx):
         embed = discord.Embed(
