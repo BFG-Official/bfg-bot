@@ -112,7 +112,7 @@ class commands_base(commands.Cog):
         except:
             await ctx.message.reply('Пиши `>напомни (ДД.ММ.ГГ_ЧЧ:ММ) (текст)`. Писать **будущую московскую** дату')
 
-    @commands.command()
+    @commands.command(aliases=['юзер'])
     @commands.guild_only()
     async def инфо(self, ctx, member: Union[discord.Member, int, str] = None):
         
