@@ -59,7 +59,7 @@ class commands_base(commands.Cog):
             icon_url = ctx.author.avatar.url
             ))
     
-    @commands.command()
+    @commands.command(aliases=['реп'])
     @commands.guild_only()
     async def репутация(self, ctx, member: discord.Member = None):
         if member is None:
