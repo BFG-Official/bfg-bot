@@ -59,26 +59,6 @@ class commands_base(commands.Cog):
             icon_url = ctx.author.avatar.url
             ))
     
-    @commands.command(aliases=['реп'])
-    @commands.guild_only()
-    async def репутация(self, ctx, member: discord.Member = None):
-        if member is None:
-            await ctx.message.reply(embed = discord.Embed(
-                description=f'Репутация пользователя __**{ctx.author}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]}**__',
-                color = discord.Colour.random()
-            ).set_footer(
-            text = f'{ctx.author} вызвал команду',
-            icon_url = ctx.author.avatar.url
-            ))
-        else:
-            await ctx.send(embed = discord.Embed(
-                description=f'Репутация пользователя __**{member}**__ равна __**{cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0]}**__',
-                color = discord.Colour.random()
-            ).set_footer(
-            text = f'{ctx.author} вызвал команду',
-            icon_url = ctx.author.avatar.url
-            ))
-    
     @commands.command()
     @commands.guild_only()
     async def привет(self, ctx):
@@ -134,6 +114,7 @@ class commands_base(commands.Cog):
         embed.add_field(name="ID:", value=member.id, inline=True)
         embed.add_field(name="Имя:", value=member.display_name, inline=True)
         embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
+        embed.add_field(name="Репутация:", value=cursor.execute("SELECT rep FROM users WHERE id = {}".format(member.id)).fetchone()[0], inline=True)
         
         if isinstance(member, int):
             age = None
