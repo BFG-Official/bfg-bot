@@ -45,7 +45,7 @@ class commands_admin(commands.Cog):
     @commands.guild_only()
     async def измрепут(self, ctx, member: discord.Member = None, amount: int = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
-        if member is None: return await ctx.message.reply('Укажите пользователя `>измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
+        if member is None: return await ctx.message.reply('Укажите пользователя `?измрепут (@участник) (репутация (может быть отрицательной)) (причина)`')
         if member.bot: return await ctx.message.reply('У ботов нет рейтинга')
         if amount is None: return await ctx.message.reply('Укажите на сколько изменить репутацию')
         cursor.execute("UPDATE users SET rep = rep + {} WHERE id = {}".format(amount, member.id))
@@ -82,7 +82,7 @@ class commands_admin(commands.Cog):
     @commands.guild_only()
     async def cleardb(self, ctx, namedb: str = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
-        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>cleardb (тип)`')
+        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `?cleardb (тип)`')
         if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.message.reply('Существуют только `rep, lvl, bankcash, cash`')
         cursor.execute("UPDATE users SET {} = 0".format(namedb))
         connection.commit()
@@ -98,7 +98,7 @@ class commands_admin(commands.Cog):
     @commands.guild_only()
     async def changedb(self, ctx, namedb: str = None, member: discord.Member = None, changed = None, *, reason: str = 'Без причины'):
         if not (ctx.author.id in allowed_users): return await ctx.message.reply('У вас нет доступа!')
-        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `>changedb (тип) (@участник) (на что изменить) (причина)`')
+        if namedb is None: return await ctx.message.reply('Вы не указали тип переменной `?changedb (тип) (@участник) (на что изменить) (причина)`')
         if not (namedb in ['rep', 'lvl', 'bankcash', 'cash']): return await ctx.send('Существуют только типы `rep, lvl, bankcash, cash`')
         if namedb in ['rep', 'lvl', 'bankcash', 'cash']:
             try: changed = int(changed)

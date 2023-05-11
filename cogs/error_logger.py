@@ -15,11 +15,11 @@ class error_logger(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.message.reply('Вы не указали все аргументы. Для помощи используйте команду **>хелп**.')
+            await ctx.message.reply('Вы не указали все аргументы. Для помощи используйте команду **?хелп**.')
         elif isinstance(error, commands.MemberNotFound):
             await ctx.message.reply('Пользователь не найден.')
         elif isinstance(error, commands.BadArgument):
-            await ctx.message.reply('Неправильный аргумент. Для помощи используйте команду **>хелп**.')
+            await ctx.message.reply('Неправильный аргумент. Для помощи используйте команду **?хелп**.')
         elif isinstance(error, commands.NoPrivateMessage):
             await ctx.message.reply('Команды в личных сообщениях запрещены.')
         elif isinstance(error, commands.CommandOnCooldown):

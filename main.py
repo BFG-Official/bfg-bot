@@ -6,7 +6,7 @@ from discord import Embed
 from discord.ext import commands
 import pytz, datetime, asyncio, sqlite3
 
-bot = commands.Bot(command_prefix='>', intents=discord.Intents.all())
+bot = commands.Bot(command_prefix='?', intents=discord.Intents.all())
 bot.remove_command('help')
 
 allowed_users = [695684705328169060, 617415875947003915]
@@ -71,7 +71,7 @@ async def on_ready():
         embed.timestamp = datetime.datetime.utcnow()
         await bot.get_channel(1077307732757057656).send(embed=embed)
         
-        await bot.change_presence(activity=discord.Game(name="Напишите >хелп чтобы открыть список команд"))
+        await bot.change_presence(activity=discord.Game(name="Напишите ?хелп чтобы открыть список команд"))
         print('BFG-bot готов к работе!')
 
     except Exception as e:
