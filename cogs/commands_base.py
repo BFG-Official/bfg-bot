@@ -155,6 +155,7 @@ class commands_base(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(rate=1, per=3, type=commands.BucketType.user)
     async def кот(self, ctx):
         response = requests.get('https://api.thecatapi.com/v1/images/search')
         data = response.json()
@@ -166,6 +167,7 @@ class commands_base(commands.Cog):
 
     @commands.command(aliases=['пес'])
     @commands.guild_only()
+    @commands.cooldown(rate=1, per=3, type=commands.BucketType.user)
     async def пёс (self, ctx):
         response = requests.get('https://api.thedogapi.com/v1/images/search')
         data = response.json()
