@@ -37,7 +37,9 @@ class anti_pon(commands.Cog):
                 for n in ['н','Н','n','N','h','H']:
                     pon_words.append(p + o + n)
         message = await commands.Bot.get_channel(self.client, payload.channel_id).fetch_message(payload.message_id)
-        mess = payload.data['content']
+        mess = payload.data.get('content')
+        if mess is None:
+            return
         mess = ' ' + mess.replace('||','').replace('*','').replace('_','').replace('-','').replace('.','').replace('!','').replace('?','').replace('"','').replace("'","").replace('`','').replace('⠀','') + ' '
         for i in pon_words:
             if (' ' + i + ' ' in mess):
