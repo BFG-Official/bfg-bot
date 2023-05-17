@@ -15,9 +15,9 @@ class SystemStatus(commands.Cog):
     async def update_stats(self):
         cpu_usage = psutil.cpu_percent()
         ram_usage = psutil.virtual_memory().percent
-        total_memory = round(psutil.virtual_memory().total / 1024 / 1024)  # В мегабайтах, округлено
+        total_memory = round(psutil.virtual_memory().total / 1024 / 1024)
         processes = sorted(psutil.process_iter(['name', 'memory_info']), key=lambda p: p.info['memory_info'].rss, reverse=True)
-        top_processes = processes[:5]  # Выберите количество процессов для отображения
+        top_processes = processes[:10]
 
         channel = self.client.get_channel(1108251768992837734)
         message = await channel.fetch_message(self.message_id)
