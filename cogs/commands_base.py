@@ -110,7 +110,7 @@ class commands_base(commands.Cog):
         
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
         embed.set_author(name=f"Информация о пользователе - {member}")
-        embed.set_thumbnail(url=member.avatar.url)
+        # embed.set_thumbnail(url=member.avatar.url)
         embed.add_field(name="ID:", value=member.id, inline=True)
         embed.add_field(name="Имя:", value=member.display_name, inline=True)
         embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
