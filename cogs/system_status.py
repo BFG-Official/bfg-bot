@@ -11,7 +11,7 @@ class SystemStatus(commands.Cog):
     def cog_unload(self):
         self.update_stats.cancel()
 
-    @tasks.loop(seconds=5)
+    @tasks.loop(seconds=10)
     async def update_stats(self):
         cpu_usage = psutil.cpu_percent()
         ram_usage = psutil.virtual_memory().percent
