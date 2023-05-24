@@ -19,7 +19,7 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
       with:
         source: "."
-        target: "/servers_folder/bfg-bot/"
+        target: "/servers/bfgbot/"
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
