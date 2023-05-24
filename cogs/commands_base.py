@@ -65,9 +65,9 @@ class commands_base(commands.Cog):
         await ctx.message.reply(f'Приветик, {ctx.message.author.mention}!')
 
     @commands.command()
-    @commands.guild_only()
-    async def репутация(self, ctx):
-        await ctx.message.reply('Используй ?инфо.')
+    @commands.guild_only(aliases=['репутция', 'секрет'])
+    async def реп(self, ctx):
+        await ctx.message.reply('Похоже, данная команда существовала в прошлом, но удалена в настоящем. \nИщи замену в `?хелп`.')
 
     @commands.command()
     @commands.guild_only()
