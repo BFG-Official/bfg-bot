@@ -66,6 +66,11 @@ class commands_base(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def репутация(self, ctx):
+        await ctx.message.reply('Используй ?инфо.')
+
+    @commands.command()
+    @commands.guild_only()
     async def напомни(self, ctx, ttime, *, text = 'None'):
         try:
             n = ttime + '+0300'
