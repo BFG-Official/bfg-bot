@@ -28,8 +28,7 @@ class commands_base(commands.Cog):
                         '`?пёс` - Рандомная картинка пса.',
             color=discord.Colour.random()
         )
-        # embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        embed.set_footer(text=f'{ctx.author} вызвал команду')
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.message.reply(embed=embed)
 
     @commands.command()
@@ -110,7 +109,7 @@ class commands_base(commands.Cog):
         
         embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
         embed.set_author(name=f"Информация о пользователе - {member}")
-        # embed.set_thumbnail(url=member.avatar.url)
+        embed.set_thumbnail(url=member.avatar.url)
         embed.add_field(name="ID:", value=member.id, inline=True)
         embed.add_field(name="Имя:", value=member.display_name, inline=True)
         embed.add_field(name="Аккаунт создан в:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=True)
@@ -121,8 +120,7 @@ class commands_base(commands.Cog):
         else:
             age = (ctx.message.created_at - member.created_at).days // 365
         embed.add_field(name="Возраст аккаунта:", value=f"{age} {'год' if age == 1 else 'года' if 1 < age < 5 else 'лет'}", inline=True)
-        # embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        embed.set_footer(text=f'{ctx.author} вызвал команду')
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.message.reply(embed=embed)
 
     @commands.command(aliases=['сервер'])
@@ -152,8 +150,7 @@ class commands_base(commands.Cog):
         embed.add_field(name='Каналы', value=f'Всего: {all_channels}\nТекстовых: {text_channels}\nОбъявления: {announcement_channels}\nГолосовых: {voice_channels}', inline=True)
         embed.add_field(name='Владелец', value=owner.mention, inline=True)
         embed.add_field(name='Дата создания', value=created_at, inline=True)
-        # embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        embed.set_footer(text=f'{ctx.author} вызвал команду')
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.message.reply(embed=embed)
 
     @commands.command()
@@ -165,8 +162,7 @@ class commands_base(commands.Cog):
         image_url = data[0]['url']
         embed = discord.Embed(title='Ваш котик на подходе!', color=0xff9900)
         embed.set_image(url=image_url)
-        # embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        embed.set_footer(text=f'{ctx.author} вызвал команду')
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.reply(embed=embed)
 
     @commands.command(aliases=['пес'])
@@ -178,8 +174,7 @@ class commands_base(commands.Cog):
         image_url = data[0]['url']
         embed = discord.Embed(title='Ваш пёсик на подходе!', color=0xff9900)
         embed.set_image(url=image_url)
-        # embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
-        embed.set_footer(text=f'{ctx.author} вызвал команду')
+        embed.set_footer(text=f'{ctx.author} вызвал команду', icon_url=ctx.author.avatar.url)
         await ctx.reply(embed=embed)
 
 async def setup(client):
